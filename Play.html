@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="Word.js"></script>
+    <script src="Scripts.js"></script>
+    <link rel="icon" href="1. Candy Area/Icons/P111.png">
+    <link rel="preconnect" href="https://fonts.googlEAPis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googlEAPis.com/css2?family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+    <title>Candy Clicker</title>
+    </head>
+    <body style="
+    padding-left: 20px;
+    padding-top: 50px;
+    overflow-x: hidden;
+    user-select: none;
+    ">
+    <style>
+        * {
+            font-family: 'Merriweather', serif;
+        }
+        body, html {
+            padding: 0;
+            margin: 0;
+            scrollbar-color: red;
+        }
+        ::-webkit-scrollbar {
+            width: 12px;
+            background-color: #eee;
+        }
+        ::-webkit-scrollbar-thumb {
+            border-radius: 6px;
+            background-color: rgba(255, 0, 0, 0.75);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 0, 0, 0.6);
+        }
+        button {
+            cursor: pointer;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-left: 3px;
+            margin-right: 3px;
+            box-shadow: 1px 1px 2px black;
+            outline: none;
+        }
+        button:hover {
+            opacity: 80%;
+        }
+        button:active {
+            transform: translateY(1px) scale(calc((110 / 3 - 1) / (110 / 3)));
+        }
+        img {
+            user-select: none;
+        }
+        .normalUpgraderBtns {
+            background-color: rgba(255, 0, 0, 0.25);
+            color: black;
+        }
+        .itemBtns {
+            background-color: rgba(255, 0, 0, 0.5);
+        }
+        .eggBtns {
+            background-color: rgba(255, 0, 0, 0.75);
+        }
+        .prestigeBtns {
+            background-color: rgba(255, 0, 0, 1);
+        }
+        .equipBtns {
+            background-color: red;
+        }
+        .locked, .locked:hover, .locked:active {
+            background-color: #ddd;
+            color: white;
+            cursor: context-menu;
+            transform: none;
+            opacity: 1;
+        }
+        #candy:hover {
+            transform: scale(1.3);
+        }
+        #candy:active {
+            transform: scale(1.2);
+        }
+        .recentItemContainers {
+            width: inherit;
+            height: calc(62px / 3);
+            margin-top: 16px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .recentItems {
+            position: absolute;
+            right: 0;
+            margin: 0;
+        }
+        .items, .recentItems, .pets, .equippedPets {
+            cursor: pointer;
+            font-size: 16px;
+            width: fit-content;
+        }
+        .items:hover, .pets:hover, .equippedPets:hover {
+            color: red;
+        }
+        .areas {
+            display: inline-block;
+            padding-left: 10px;
+            padding-right: 10px;
+            height: 100%;
+            line-height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .area_selected {
+            background-color: white;
+        }
+        #blueCandyBtn {
+            background-color: blue;
+            color: white;
+        }
+    </style>
+    <div id="top" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 50px;
+        background-color: #eee;
+        padding: 0;
+        text-align: center;
+        z-index: 99999999;
+    ">
+        <div id="candyArea" class="areas area_selected">Candy</div>
+        <div id="chocolateArea" class="areas">Chocolate</div>
+    </div>
+    <div id="main">
+        <div id="clicker" style="
+            position: absolute;
+            top: 50px;
+            left: 50vw;
+            width: 700px;
+            transform: translateX(-50%);
+            text-align: center;
+        ">
+            <h1>Candy Clicker</h1>
+            <p style="line-height: 24px;">Click the candy or press any key<br>to earn more candies!</p>
+            <img src="1. Candy Area/Icons/P111.png" id="candy" onclick="clickCandy()" style="
+                cursor: pointer;
+                width: 120px;
+                transition: 0.1s;
+                margin: -20px;
+            " alt="(Candy)" onmousedown="candyFlipped()" onmouseup="candyOriginal()" draggable="false">
+            <p><span id="candies">0</span> <span id="CANDIES">candies</span></p>
+            <p>OAP: <span id="OAP">0</span> cps, EAP: <span id="EAP">0</span> cps</p>
+            <p>OCP: <span id="OCP">1</span> cpc, ECP: <span id="ECP">1</span> cpc</p>
+            <button class="normalUpgraderBtns clickerBtns" id="upgradeBtn" onclick="buyUpgrade()" title="Increases OCP by 5 cpc">Upgrade</button>
+            <button class="normalUpgraderBtns clickerBtns" id="randomUpgraderBtn" onclick="buyRandomUpgrader()" title="Increases OCP by 1~5 cpc">Random upgrader</button>
+            <br>
+            <button class="itemBtns clickerBtns" id="itemBtn0" title="Produces 1 candy per second">Candy producer</button>
+            <button class="itemBtns clickerBtns" id="itemBtn1" title="Produces 10 candies per second">Candy tree</button>
+            <button class="itemBtns clickerBtns" id="itemBtn2" title="Produces 100 candies per second">Candy factory</button>
+            <button class="itemBtns clickerBtns" id="itemBtn3" title="Produces 1,000 candies per second">Candy alchemist</button>
+            <button class="itemBtns clickerBtns" id="itemBtn4" title="Produces 10,000 candies per second">Candy wizard</button>
+            <br>
+            <button class="itemBtns clickerBtns" id="itemBtn5" title="Produces 100,000 candies per second">Candy time machine</button>
+            <button class="itemBtns clickerBtns" id="itemBtn6" title="Produces 1 million candies per second">Candy treasure</button>
+            <button class="itemBtns clickerBtns" id="itemBtn7" title="Produces 10 million candies per second">Candy king</button>
+            <button class="itemBtns clickerBtns" id="itemBtn8" title="Produces 100 million candies per second">Candy JavaScripter</button>
+            <button class="itemBtns clickerBtns" id="itemBtn9" title="Produces 1 billion candies per second">Candy mind power</button>
+            <br>
+            <button class="eggBtns clickerBtns" id="decentEggBtn" onclick="buyDecentEgg()" title="Gives you a common/uncommon/rare/very rare/epic/legendary/exotic pet">Decent egg</button>
+            <button class="eggBtns clickerBtns locked" id="superEggBtn" title="Gives you a rare/very rare/epic/legendary/exotic pet">Super egg</button>
+            <button class="prestigeBtns clickerBtns" id="prestigeBtn" onclick="prestige()" title="Clears everything you have, but your click power will increase">Prestige</button>
+        </div>
+        <div id="left" style="
+            position: absolute;
+            top: 60px;
+            left: 30px;
+        ">
+            <p>Upgrade cost: <span id="upgradeCost">50</span></p>
+            <p>Random upgrader cost: <span id="randomUpgraderCost">30</span></p>
+            <p><span id="nameOfImpItem0"></span> cost: <span id="costOfImpItem0"></span></p>
+            <p><span id="nameOfImpItem1"></span> cost: <span id="costOfImpItem1"></span></p>
+            <p><span id="nameOfImpItem2"></span> cost: <span id="costOfImpItem2"></span></p>
+            <p><span id="nameOfImpItem3"></span> cost: <span id="costOfImpItem3"></span></p>
+            <p><span id="nameOfImpItem4"></span> cost: <span id="costOfImpItem4"></span></p>
+            <!-- <p>Candy producer cost: <span id="costOfItem0">10</span></p>
+            <p>Candy tree cost: <span id="costOfItem1">200</span></p>
+            <p>Candy factory cost: <span id="costOfItem2">4000</span></p>
+            <p>Candy alchemist cost: <span id="costOfItem3">80000</span></p>
+            <p>Candy wizard cost: <span id="costOfItem4">1600000</span></p>
+            <p>Candy time machine cost: <span id="costOfItem5">32000000</span></p>
+            <p>Candy treasure cost: <span id="costOfItem6">640000000</span></p>
+            <p>Candy king cost: <span id="costOfItem7">12800000000</span></p>
+            <p>Candy JavaScripter cost: <span id="costOfItem8">256000000000</span></p>
+            <p>Candy mind power cost: <span id="costOfItem9">5120000000000</span></p> -->
+            <p>Decent egg cost: <span id="decentEggCost">1000000</span></p>
+            <p>Prestige cost: <span id="prestigeCost">1000000</span></p>
+        </div>
+        <div id="right" style="
+            position: absolute;
+            top: 60px;
+            right: 30px;
+            text-align: right;
+        ">
+            <p>Total clicks: <span id="totalClicks">0</span></p>
+            <p>Prestige level: <span id="prestigeLevel">0</p>
+            <hr style="width: 200px;" align="right">
+            <!-- <p id="item0" data-name="Candy produer" data-info="AP: 1 cps" class="items">Candy producers x<span id="numOfItem0">0</span></p>
+            <p id="item1" data-name="Candy tree" data-info="AP: 10 cps" class="items">Candy trees x<span id="numOfItem1">0</span></p>
+            <p id="item2" data-name="Candy factory" data-info="AP: 100 cps" class="items">Candy factories x<span id="numOfItem2">0</span></p>
+            <p id="item3" data-name="Candy alchemist" data-info="AP: 1,000 cps" class="items">Candy alchemists x<span id="numOfItem3">0</span></p>
+            <p id="item4" data-name="Candy wizard" data-info="AP: 10,000 cps" class="items">Candy wizards x<span id="numOfItem4">0</span></p>
+            <p id="item5" data-name="Candy time machine" data-info="AP: 100,000 cps" class="items">Candy time machines x<span id="numOfItem5">0</span></p>
+            <p id="item6" data-name="Candy treasure" data-info="AP: 1 million cps" class="items">Candy treasures x<span id="numOfItem6">0</span></p>
+            <p id="item7" data-name="Candy king" data-info="AP: 10 million cps" class="items">Candy kings x<span id="numOfItem7">0</span></p>
+            <p id="item8" data-name="Candy JavaScripter" data-info="AP: 100 million cps" class="items">Candy JavaScripters x<span id="numOfItem8">0</span></p>
+            <p id="item9" data-name="Candy mind power" data-info="AP: 1 billion cps" class="items">Candy mind powers x<span id="numOfItem9">0</span></p> -->
+            <div id="recentItemContainer0" class="recentItemContainers">
+                <p id="recentItem0" class="recentItems"><span id="nameOfRecentItem0"></span><span id="numOfRecentItem0">0</span></p>
+            </div>
+            <div id="recentItemContainer1" class="recentItemContainers">
+                <p id="recentItem1" class="recentItems"><span id="nameOfRecentItem1"></span><span id="numOfRecentItem1">0</span></p>
+            </div>
+            <div id="recentItemContainer2" class="recentItemContainers">
+                <p id="recentItem2" class="recentItems"><span id="nameOfRecentItem2"></span><span id="numOfRecentItem2">0</span></p>
+            </div>
+            <button onclick="openInventory()" style="background-color: #444;">Inventory</button>
+            <br>
+            <button class="colorBtns" id="blueCandyBtn" onclick="blueCandy()" style="display: none;">Blue candy</button>
+        </div>
+    </div>
+    <div id="inventory" style="display: none;">
+        <h1>Inventory</h1>
+        <div style="
+            position: absolute;
+            right: 30px;
+            top: 80px;
+        ">
+            <button id="itemsPageBtn" onclick="openItemsPage()" style="background-color: #444; display: none;">Items</button>
+            <button id="petsPageBtn" onclick="openPetsPage()" style="background-color: #444;">Pets</button>
+            <button onclick="openMainPage()" style="background-color: #444;">Main page</button>
+        </div>
+        <div id="petsPage" style="display: none;">
+            <div id="ownedPets" style="
+                position: absolute;
+                top: 120px;
+                left: 20px;
+            ">
+                <h2>Owned pets</h2>
+                <p id="pet0" data-id="0" class="ownedPets pets"><span class="petName"></span><span id="numOfPet0" class="numOfPets">0</span></p>
+                <p id="pet1" data-id="1" class="ownedPets pets"><span class="petName"></span><span id="numOfPet1" class="numOfPets">0</span></p>
+                <p id="pet2" data-id="2" class="ownedPets pets"><span class="petName"></span><span id="numOfPet2" class="numOfPets">0</span></p>
+                <p id="pet3" data-id="3" class="ownedPets pets"><span class="petName"></span><span id="numOfPet3" class="numOfPets">0</span></p>
+                <p id="pet4" data-id="4" class="ownedPets pets"><span class="petName"></span><span id="numOfPet4" class="numOfPets">0</span></p>
+                <p id="pet5" data-id="5" class="ownedPets pets"><span class="petName"></span><span id="numOfPet5" class="numOfPets">0</span></p>
+                <p id="pet6" data-id="6" class="ownedPets pets"><span class="petName"></span><span id="numOfPet6" class="numOfPets">0</span></p>
+                <p id="pet7" data-id="7" class="ownedPets pets"><span class="petName"></span><span id="numOfPet7" class="numOfPets">0</span></p>
+                <p id="pet8" data-id="8" class="ownedPets pets"><span class="petName"></span><span id="numOfPet8" class="numOfPets">0</span></p>
+                <p id="pet9" data-id="9" class="ownedPets pets"><span class="petName"></span><span id="numOfPet9" class="numOfPets">0</span></p>
+                <p id="pet10" data-id="10" class="ownedPets pets"><span class="petName"></span><span id="numOfPet10" class="numOfPets">0</span></p>
+                <p id="pet11" data-id="11" class="ownedPets pets"><span class="petName"></span><span id="numOfPet11" class="numOfPets">0</span></p>
+                <p id="pet12" data-id="12" class="ownedPets pets"><span class="petName"></span><span id="numOfPet12" class="numOfPets">0</span></p>
+                <p id="pet13" data-id="13" class="ownedPets pets"><span class="petName"></span><span id="numOfPet13" class="numOfPets">0</span></p>
+                <p id="pet14" data-id="14" class="ownedPets pets"><span class="petName"></span><span id="numOfPet14" class="numOfPets">0</span></p>
+                <p id="pet15" data-id="15" class="ownedPets pets"><span class="petName" class="numOfPets"></span><span id="numOfPet15" class="numOfPets">0</span></p>
+            </div>
+            <div id="equippedPets" style="
+                position: absolute;
+                top: 120px;
+                left: calc(50% + 20px);
+            ">
+                <h2>Equipped pets</h2>
+                <p id="equippedPet0" class="equippedPets pets">Pet 1. <span id="numOfEquippedPet0"></span></p>
+                <p id="equippedPet1" class="equippedPets pets">Pet 2. <span id="numOfEquippedPet1"></span></p>
+                <p id="equippedPet2" class="equippedPets pets">Pet 3. <span id="numOfEquippedPet2"></span></p>
+                <p id="equippedPet3" class="equippedPets pets">Pet 4. <span id="numOfEquippedPet3"></span></p>
+                <p id="equippedPet4" class="equippedPets pets">Pet 5. <span id="numOfEquippedPet4"></span></p>
+                <hr style="width: 350px;" align="left">
+                <p>CPE: <span id="CPE">1</span></p>
+                <p>APE: <span id="APE">1</span></p>
+            </div>
+            <div id="petPage" style="
+                display: none;
+                position: absolute;
+                top: 120px;
+                left: 20px;
+            ">
+                <h2 id="petPage_name">(Name)</h1>
+                <p id="petPage_id" style="display: none;"></p>
+                <img id="petPage_img" src="1. Candy Area/Icons/P111.png" alt="(Image)" style="width: 250px;" draggable="false">
+                <p>You have <span id="petPage_num">0</span> of these pets (<span id="petPage_numOfEquipped">0</span> equipped).</p>
+                <p>CPE: <span id="petPage_CPE">(CPE)</span></p>
+                <p>APE: <span id="petPage_APE">(APE)</span></p>
+                <p id="petPage_SPContainer">SP: <span id="petPage_SP">(SP)</span></p>
+                <button id="equipBtn" class="equipBtns">Equip</button>
+                <button id="unequipBtn" class="equipBtns">Unequip</button>
+                <br>
+                <button onclick="closePetPage()" style="background-color: #444;">Back</button>
+            </div>
+        </div>
+        <div id="itemsPage" style="
+            position: absolute;
+            top: 120px;
+            left: 20px;
+        ">
+            <h2>Items</h2>
+        </div>
+    </div>
+</body></html>
