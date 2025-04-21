@@ -476,11 +476,11 @@ function closePetPage() {
 }
 
 function candyFlipped() {
-  document.getElementById("candy").src = "1. Candy Area/Icons/P112.png";
+  document.getElementById("candy").src = "1. Candy Area/Icons/P0010.png";
 }
 
 function candyOriginal() {
-  document.getElementById("candy").src = "1. Candy Area/Icons/P111.png";
+  document.getElementById("candy").src = "1. Candy Area/Icons/P0000.png";
 }
 
 setTimeout(function() {
