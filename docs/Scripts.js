@@ -22,7 +22,7 @@ var itemList = [ // [0 name, 1 num, 2 cost, 3 ap]
 var numOfItem = [];
 var recentItems = [];
 var upgradeCost = 50;
-var randomUpgraderCost = 30;
+var randomUpgradeCost = 30;
 var costOfItem = [];
 var impItems = [];
 var decentEggCost = 1000000;
@@ -45,7 +45,7 @@ var petList = [ // [0 name, 1 rarity, 2 CPE, 3 APE, 4 SP, 5 num, 6 num of equipp
   ["False Dilemma Candy", 3, 0.01, 0.01, 0], // 11
   ["Failed Experimental Candy", 3, 1.2, 1, "Players can trade 3 of those for 1 rebirth level"], // 12
   ["Successful Experimental Candy", 4, 3.5, 2.99, "x10.2 candy alchemists and candy time machines’ effects"], // 13
-  ["Candy Essence from the Nature", 5, 9.78, 8, "x2 egg rewards"], // 14
+  ["Candy Essence from Nature", 5, 9.78, 8, "x2 egg rewards"], // 14
   ["LORD of CANDIES", 6, 20, 20, "x7 all the other equipped pets’ CPEs and APEs"] // 15
 ]
 var totalClicksAchs = [
@@ -146,7 +146,7 @@ function update() {
   document.getElementById("OAP").innerHTML = word(OAP);
   document.getElementById("EAP").innerHTML = word(EAP);
   document.getElementById("upgradeCost").innerHTML = word(upgradeCost) + " (" + percentage(upgradeCost) + "%)";
-  document.getElementById("randomUpgraderCost").innerHTML = word(randomUpgraderCost) + " (" + percentage(randomUpgraderCost) + "%)";
+  document.getElementById("randomUpgradeCost").innerHTML = word(randomUpgradeCost) + " (" + percentage(randomUpgradeCost) + "%)";
   document.getElementById("decentEggCost").innerHTML = word(decentEggCost) + " (" + percentage(decentEggCost) + "%)";
   // for (var i = 0; i < numOfItem.length; i++) {
   //   document.getElementById("numOfItem" + i).innerHTML = numOfItem[i];
@@ -163,17 +163,7 @@ function update() {
       document.getElementById("recentItem" + i).removeAttribute("data-id");
     }
   }
-  updateImpItems();
-  for (var i = 0; i < impItems.length; i++) {
-    document.getElementById("nameOfImpItem" + i).innerHTML = itemList[impItems[i]][0];
-    document.getElementById("costOfImpItem" + i).innerHTML = itemList[impItems[i]][2];
-  }
 }
-
-function updateImpItems () {
-  
-}
-
  document.oncontextmenu = function() {
   window.event.returnValue = false; 
 }
@@ -194,10 +184,10 @@ function mainBtns() {
   } else {
     document.getElementById("upgradeBtn").classList.add("locked");
   }
-  if (candies >= randomUpgraderCost) {
-    document.getElementById("randomUpgraderBtn").classList.remove("locked");
+  if (candies >= randomUpgradeCost) {
+    document.getElementById("randomUpgradeBtn").classList.remove("locked");
   } else {
-    document.getElementById("randomUpgraderBtn").classList.add("locked");
+    document.getElementById("randomUpgradeBtn").classList.add("locked");
   }
   for (var i = 0; i < itemList.length; i++) {
     if (candies >= itemList[i][2]) {
@@ -239,11 +229,11 @@ function buyUpgrade() {
   }
 }
 
-function buyRandomUpgrader() {
-  if (candies >= randomUpgraderCost) {
-    candies -= randomUpgraderCost;
+function buyRandomUpgrade() {
+  if (candies >= randomUpgradeCost) {
+    candies -= randomUpgradeCost;
     OCP += Math.floor(Math.random() * 5) + 1;
-    randomUpgraderCost = increase(randomUpgraderCost);
+    randomUpgradeCost = increase(randomUpgradeCost);
     update();
   }
 }
@@ -375,7 +365,7 @@ function prestige() {
   //   candies = 0;
   //   upgradeLevel = 1;
   //   upgradeCost = 50;
-  //   randomUpgraderCost = 30;
+  //   randomUpgradeCost = 30;
   //   candyProducers = 0;
   //   candyProducerCost = 10;
   //   candyTrees = 0;
@@ -476,11 +466,11 @@ function closePetPage() {
 }
 
 function candyFlipped() {
-  document.getElementById("candy").src = "1. Candy Area/Icons/P0010.png";
+  document.getElementById("candy").src = "0. Candy Area/Icons/P0010.png";
 }
 
 function candyOriginal() {
-  document.getElementById("candy").src = "1. Candy Area/Icons/P0000.png";
+  document.getElementById("candy").src = "0. Candy Area/Icons/P0000.png";
 }
 
 setTimeout(function() {
@@ -567,9 +557,9 @@ setTimeout(function() {
     }
   })
 
-  //A key is pressed
+  // A key is pressed
   document.body.addEventListener("keydown", function() {
-    if (!bodyKeydown) {
+    if (!bodyKeydown && (event.key == "C" || event.key == "c")) {
       clickCandy();
       candyFlipped();
       bodyKeydown = true;
@@ -578,5 +568,55 @@ setTimeout(function() {
   document.body.addEventListener("keyup", function() {
     candyOriginal();
     bodyKeydown = false;
+  });
+
+  // Custom selects
+  for (var i = 0; i < document.getElementsByClassName("itemOptions").length; i++) {
+    for (var j = 0; j < itemList.length; j++) {
+      var newOption = document.createElement("div");
+      var itemName_str = itemList[j][0];
+      var itemName_arr = itemName_str.split(" ");
+      itemName_arr.shift();
+      itemName_str = itemName_arr.join(" ");
+      newOption.classList.add("option");
+      newOption.innerHTML = itemName_str;
+      document.getElementsByClassName("itemOptions")[i].appendChild(newOption);
+    }
+  }
+  document.querySelectorAll('.custom-select').forEach(select => {
+    const selected = select.querySelector('.selected');
+    const options = select.querySelector('.options');
+
+    selected.addEventListener('click', () => {
+      closeAllSelects(selected);
+      options.style.display = options.style.display === 'block' ? 'none' : 'block';
+      selected.classList.toggle('open');
+    });
+
+    options.querySelectorAll('.option').forEach(option => {
+      option.addEventListener('click', () => {
+        selected.textContent = option.textContent;
+        options.style.display = 'none';
+        selected.classList.remove('open');
+      });
+    });
+  });
+
+  function closeAllSelects(current) {
+    document.querySelectorAll('.custom-select').forEach(select => {
+      const options = select.querySelector('.options');
+      const selected = select.querySelector('.selected');
+      if (selected !== current) {
+        options.style.display = 'none';
+        selected.classList.remove('open');
+      }
+    });
+  }
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.custom-select')) {
+      document.querySelectorAll('.options').forEach(o => o.style.display = 'none');
+      document.querySelectorAll('.selected').forEach(s => s.classList.remove('open'));
+    }
   });
 }, 100);
