@@ -46,6 +46,7 @@
             margin-right: 3px;
             box-shadow: 1px 1px 2px black;
             outline: none;
+            font-size: 14px;
         }
         button:hover {
             opacity: 80%;
@@ -56,7 +57,12 @@
         img {
             user-select: none;
         }
-        .normalUpgraderBtns {
+        p, .pdiv {
+            font-size: 16px;
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+        .normalUpgradeBtns {
             background-color: rgba(255, 0, 0, 0.25);
             color: black;
         }
@@ -102,7 +108,7 @@
             font-size: 16px;
             width: fit-content;
         }
-        .items:hover, .pets:hover, .equippedPets:hover {
+        .selected:hover, .items:hover, .pets:hover, .equippedPets:hover {
             color: red;
         }
         .areas {
@@ -120,6 +126,58 @@
         #blueCandyBtn {
             background-color: blue;
             color: white;
+        }
+        .custom-select {
+            display: inline-block;
+            position: relative;
+            width: 200px;
+            border: none;
+            border-bottom: 2px solid black;
+            border-radius: 0;
+            font-family: sans-serif;
+            font-size: 16px;
+            user-select: none;
+        }
+        .selectedItem {
+            width: 130px;
+        }
+        .selectedPB {
+            width: 120px;
+        }
+        .selectedEgg {
+            width: 100px;
+        }
+        .selected {
+            padding: 5px;
+            border: none;
+            border-radius: 8px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .options {
+            display: none;
+            position: absolute;
+            width: 100%;
+            top: 110%;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            z-index: 99;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .option {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .custom-select.open .options {
+            display: block;
         }
     </style>
     <div id="top" style="
@@ -146,7 +204,7 @@
             text-align: center;
         ">
             <h1>Candy Clicker</h1>
-            <p style="line-height: 24px;">Click the candy or press any key<br>to earn more candies!</p>
+            <p style="line-height: 24px;">Click the candy or press "C"<br>to earn more candies!</p>
             <img src="0. Candy Area/Icons/P0000.png" id="candy" onclick="clickCandy()" style="
                 cursor: pointer;
                 width: 120px;
@@ -156,8 +214,8 @@
             <p><span id="candies">0</span> <span id="CANDIES">candies</span></p>
             <p>OAP: <span id="OAP">0</span> cps, EAP: <span id="EAP">0</span> cps</p>
             <p>OCP: <span id="OCP">1</span> cpc, ECP: <span id="ECP">1</span> cpc</p>
-            <button class="normalUpgraderBtns clickerBtns" id="upgradeBtn" onclick="buyUpgrade()" title="Increases OCP by 5 cpc">Upgrade</button>
-            <button class="normalUpgraderBtns clickerBtns" id="randomUpgraderBtn" onclick="buyRandomUpgrader()" title="Increases OCP by 1~5 cpc">Random upgrader</button>
+            <button class="normalUpgradeBtns clickerBtns" id="upgradeBtn" onclick="buyUpgrade()" title="Increases OCP by 5 cpc">Upgrade</button>
+            <button class="normalUpgradeBtns clickerBtns" id="randomUpgradeBtn" onclick="buyRandomUpgrade()" title="Increases OCP by 1~5 cpc">Random upgrade</button>
             <br>
             <button class="itemBtns clickerBtns" id="itemBtn0" title="Produces 1 candy per second">Candy producer</button>
             <button class="itemBtns clickerBtns" id="itemBtn1" title="Produces 10 candies per second">Candy tree</button>
@@ -181,12 +239,56 @@
             left: 30px;
         ">
             <p>Upgrade cost: <span id="upgradeCost">50</span></p>
-            <p>Random upgrader cost: <span id="randomUpgraderCost">30</span></p>
-            <p><span id="nameOfImpItem0"></span> cost: <span id="costOfImpItem0"></span></p>
-            <p><span id="nameOfImpItem1"></span> cost: <span id="costOfImpItem1"></span></p>
-            <p><span id="nameOfImpItem2"></span> cost: <span id="costOfImpItem2"></span></p>
-            <p><span id="nameOfImpItem3"></span> cost: <span id="costOfImpItem3"></span></p>
-            <p><span id="nameOfImpItem4"></span> cost: <span id="costOfImpItem4"></span></p>
+            <p>Random upgrade cost: <span id="randomUpgradeCost">30</span></p>
+            <div class="pdiv">
+                Candy 
+                <div class="custom-select selectedItem">
+                  <div class="selected">(Select)</div>
+                  <div class="options itemOptions"></div>
+                </div>
+                 cost: 
+                <span id="costOfSelectedItem0"></span>
+            </div>
+            <div class="pdiv">
+                Candy 
+                <div class="custom-select selectedItem">
+                  <div class="selected">(Select)</div>
+                  <div class="options itemOptions"></div>
+                </div>
+                 cost: 
+                <span id="costOfSelectedItem1"></span>
+            </div>
+            <div class="pdiv">
+                Candy 
+                <div class="custom-select selectedItem">
+                  <div class="selected">(Select)</div>
+                  <div class="options itemOptions"></div>
+                </div>
+                 cost: 
+                <span id="costOfSelectedItem2"></span>
+            </div>
+            <div class="pdiv">
+                <div class="custom-select selectedPB">
+                  <div class="selected">(Select)</div>
+                  <div class="options">
+                    <div class="option">Prestige</div>
+                    <div class="option">Rebirth</div>
+                  </div>
+                </div>
+                 cost: 
+                <span id="costOfSelectedPB"></span>
+            </div>
+            <div class="pdiv">
+                <div class="custom-select selectedEgg">
+                  <div class="selected">(Select)</div>
+                  <div class="options">
+                    <div class="option">Decent</div>
+                    <div class="option">Super</div>
+                  </div>
+                </div>
+                 egg cost: 
+                <span id="costOfSelectedEgg"></span>
+            </div>
             <!-- <p>Candy producer cost: <span id="costOfItem0">10</span></p>
             <p>Candy tree cost: <span id="costOfItem1">200</span></p>
             <p>Candy factory cost: <span id="costOfItem2">4000</span></p>
