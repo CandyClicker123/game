@@ -7,7 +7,7 @@ var CPE = 1;
 var OAP = 0;
 var EAP = 0;
 var APE = 1;
-var itemList = [ // [0 name, 1 num, 2 cost, 3 ap]
+var itemList0 = [ // [0 name, 1 num, 2 cost, 3 ap]
   ["Candy producer"], // 0
   ["Candy tree"], // 1
   ["Candy factory"], // 2
@@ -19,13 +19,14 @@ var itemList = [ // [0 name, 1 num, 2 cost, 3 ap]
   ["Candy JavaScripter"], // 8
   ["Candy mind power"] // 9
 ];
+var itemList;
 var numOfItem = [];
 var recentItems = [];
 var upgradeCost = 50;
 var randomUpgradeCost = 30;
-var costOfItem = [];
 var impItems = [];
 var decentEggCost = 1000000;
+var superEggCost = 1000000000;
 var prestigeCost = 1000000;
 var prestigeLevel = 0;
 var equippedPets = [];
@@ -59,9 +60,10 @@ var totalClicksAchs = [
 ];
 var finishedTotalClicksAchs = 0;
 
-for (var i = 0; i < itemList.length; i++) {
-  itemList[i].push(0, 20 ** i * 10, 10 ** i);
+for (var i = 0; i < itemList0.length; i++) {
+  itemList0[i].push(0, 20 ** i * 10, 10 ** i);
 }
+itemList = itemList0.map(item => [...item]);
 for (var i = 0; i < petList.length; i++) {
   petList[i].push(0, 0);
 }
@@ -137,7 +139,6 @@ function update() {
   ECP = Math.round(OCP * CPE);
   EAP = Math.round(OAP * APE);
   document.getElementById("candies").innerHTML = word(candies);
-  document.getElementById("prestigeCost").innerHTML = word(prestigeCost) + " (" + percentage(prestigeCost) + "%)";
   document.getElementById("prestigeLevel").innerHTML = prestigeLevel;
   document.getElementById("CPE").innerHTML = CPE;
   document.getElementById("APE").innerHTML = APE;
@@ -147,11 +148,24 @@ function update() {
   document.getElementById("EAP").innerHTML = word(EAP);
   document.getElementById("upgradeCost").innerHTML = word(upgradeCost) + " (" + percentage(upgradeCost) + "%)";
   document.getElementById("randomUpgradeCost").innerHTML = word(randomUpgradeCost) + " (" + percentage(randomUpgradeCost) + "%)";
-  document.getElementById("decentEggCost").innerHTML = word(decentEggCost) + " (" + percentage(decentEggCost) + "%)";
-  // for (var i = 0; i < numOfItem.length; i++) {
-  //   document.getElementById("numOfItem" + i).innerHTML = numOfItem[i];
-  //   document.getElementById("costOfItem" + i).innerHTML = word(costOfItem[i]) + " (" + percentage(costOfItem[i]) + "%)";
-  // }
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < itemList.length; j++) {
+      if (itemList[j][0].includes(document.getElementsByClassName("selected")[i].innerHTML)) {
+        document.getElementById("costOfSelectedItem" + i).innerHTML = word(itemList[j][2]) + " (" + percentage(itemList[j][2]) + "%)";
+      }
+    }
+  }
+  if (document.getElementsByClassName("selected")[3].innerHTML == "Decent") {
+    document.getElementById("costOfSelectedEgg").innerHTML = word(decentEggCost) + " (" + percentage(decentEggCost) + "%)";
+  } else if (document.getElementsByClassName("selected")[3].innerHTML == "Super") {
+    document.getElementById("costOfSelectedEgg").innerHTML = word(superEggCost) + " (" + percentage(superEggCost) + "%)";
+  }
+  if (document.getElementsByClassName("selected")[4].innerHTML == "Prestige") {
+    document.getElementById("costOfSelectedPB").innerHTML = word(prestigeCost) + " (" + percentage(prestigeCost) + "%)";
+  } else if (document.getElementsByClassName("selected")[4].innerHTML == "Rebirth") {
+    document.getElementById("costOfSelectedPB").innerHTML = "";
+    // document.getElementById("costOfSelectedPB").innerHTML = ;
+  }
   for (var i = 0; i < 3; i++) {
     if (i < recentItems.length) {
       document.getElementById("nameOfRecentItem" + i).innerHTML = itemList[recentItems[i]][0];
@@ -200,6 +214,11 @@ function mainBtns() {
     document.getElementById("decentEggBtn").classList.remove("locked");
   } else {
     document.getElementById("decentEggBtn").classList.add("locked");
+  }
+  if (candies >= superEggCost) {
+    document.getElementById("superEggBtn").classList.remove("locked");
+  } else {
+    document.getElementById("superEggBtn").classList.add("locked");
   }
   if (candies >= prestigeCost) {
     document.getElementById("prestigeBtn").classList.remove("locked");
@@ -349,7 +368,29 @@ function buyDecentEgg() {
     candies -= decentEggCost;
     decentEggCost = increase2(decentEggCost);
     document.getElementById("candies").innerHTML = candies;
-    document.getElementById("decentEggCost").innerHTML = decentEggCost;
+  }
+}
+
+function buySuperEgg() {
+  if (candies >= superEggCost) {
+    var random = Math.random() * 100;
+    console.log(random);
+    if (random < 22.5) {
+      pet(8);
+    } else if (random < 45) {
+      pet(9);
+    } else if (random < 86) {
+      pet(10);
+    } else if (random < 94) {
+      pet(13);
+    } else if (random < 98.5) {
+      pet(14);
+    } else {
+      pet(15);
+    }
+    candies -= superEggCost;
+    superEggCost = increase2(superEggCost);
+    document.getElementById("candies").innerHTML = candies;
   }
 }
 
@@ -360,37 +401,21 @@ function totalClicksAch(ach) {
 }
 
 function prestige() {
-  // if (candies >= prestigeCost) {
-  //   OCP = OCP * 2;
-  //   candies = 0;
-  //   upgradeLevel = 1;
-  //   upgradeCost = 50;
-  //   randomUpgradeCost = 30;
-  //   candyProducers = 0;
-  //   candyProducerCost = 10;
-  //   candyTrees = 0;
-  //   candyTreeCost = 200;
-  //   candyFactories = 0;
-  //   candyFactoryCost = 4000;
-  //   candyAlchemists = 0;
-  //   candyAlchemistCost = 80000;
-  //   candyWizards = 0;
-  //   candyWizardCost = 1600000;
-  //   candyTimeMachines = 0;
-  //   candyTimeMachineCost = 32000000;
-  //   candyTreasures = 0;
-  //   candyTreasureCost = 640000000;
-  //   candyKings = 0;
-  //   candyKingCost = 12800000000;
-  //   candyJavaScripters = 0;
-  //   candyJavaScripterCost = 256000000000;
-  //   candyMindPowers = 0;
-  //   candyMindPowerCost = 5120000000000;
-  //   prestigeLevel++;
-  //   prestigeCost = prestigeCost * 2;
-  //   OAP = 0;
-  //   update();
-  // }
+  if (candies >= prestigeCost) {
+    OAP *= 2;
+    OCP *= 2;
+    candies = 0;
+    upgradeCost = 50;
+    randomUpgradeCost = 30;
+    itemList = itemList0.map(item => [...item]);
+    prestigeLevel++;
+    prestigeCost *= 2;
+    update();
+  }
+}
+
+function rebirth() {
+
 }
 
 function openMainPage() {
@@ -412,6 +437,10 @@ function openInventory() {
     left: 0,
     behavior: "smooth"
   });
+  console.log("wait ")
+  for (var i = 0; i < itemList.length; i++) {
+    document.getElementById("numOfItem" + i).innerHTML = " x" + itemList[i][1];
+  }
 }
 
 function openItemsPage() {
@@ -440,7 +469,12 @@ function openPetPage(id) {
     });
     document.getElementById("petPage_name").innerHTML = rarities[petList[id][1]] + " - " + petList[id][0];
     document.getElementById("petPage_id").innerHTML = id;
-    // document.getElementById("petPage_img").src = "1. Candy Area/Icons/P13" + i + 1;
+    try {
+      document.getElementById("petPage_img").src = "0. Candy Area/Pets/P0" + (100 + Number(id)) + ".png";
+    }
+    catch(err) {
+      document.getElementById("petPage_img").src = "0. Candy Area/Icons/P0000.png";
+    }
     document.getElementById("petPage_num").innerHTML = petList[id][5];
     document.getElementById("petPage_numOfEquipped").innerHTML = petList[id][6];
     document.getElementById("petPage_CPE").innerHTML = petList[id][2];
@@ -510,11 +544,11 @@ setTimeout(function() {
   }
 
   // An item is clicked
-  // for (var i = 0; i < document.getElementsByClassName("items").length; i++) {
-  //   document.getElementsByClassName("items")[i].addEventListener("click", function() {
-  //     alert("Information about '" + this.dataset.name + "'\n" + this.dataset.info);
-  //   });
-  // }
+  for (var i = 0; i < document.getElementsByClassName("items").length; i++) {
+    document.getElementsByClassName("items")[i].addEventListener("click", function() {
+      alert("Information about '" + this.dataset.name + "'\n" + this.dataset.info);
+    });
+  }
 
   // An item button is clicked
   for (var i = 0; i < document.getElementsByClassName("itemBtns").length; i++) {
@@ -583,40 +617,41 @@ setTimeout(function() {
       document.getElementsByClassName("itemOptions")[i].appendChild(newOption);
     }
   }
-  document.querySelectorAll('.custom-select').forEach(select => {
-    const selected = select.querySelector('.selected');
-    const options = select.querySelector('.options');
-
-    selected.addEventListener('click', () => {
+  document.querySelectorAll(".custom-select").forEach(select => {
+    var selected = select.querySelector(".selected");
+    var options = select.querySelector(".options");
+    selected.addEventListener("click", () => {
       closeAllSelects(selected);
-      options.style.display = options.style.display === 'block' ? 'none' : 'block';
-      selected.classList.toggle('open');
+      options.style.display = options.style.display === "block" ? "none" : "block";
+      selected.classList.toggle("open");
+      if (selected.classList.contains("open")) {
+        for (var i = 0; i < document.getElementsByClassName("itemOptions").length; i++) {
+          document.getElementsByClassName("itemOptions")[i].scrollTop = 0;
+        }
+      }
     });
-
-    options.querySelectorAll('.option').forEach(option => {
-      option.addEventListener('click', () => {
+    options.querySelectorAll(".option").forEach(option => {
+      option.addEventListener("click", () => {
         selected.textContent = option.textContent;
-        options.style.display = 'none';
-        selected.classList.remove('open');
+        options.style.display = "none";
+        selected.classList.remove("open");
       });
     });
   });
-
   function closeAllSelects(current) {
-    document.querySelectorAll('.custom-select').forEach(select => {
-      const options = select.querySelector('.options');
-      const selected = select.querySelector('.selected');
+    document.querySelectorAll(".custom-select").forEach(select => {
+      const options = select.querySelector(".options");
+      const selected = select.querySelector(".selected");
       if (selected !== current) {
-        options.style.display = 'none';
-        selected.classList.remove('open');
+        options.style.display = "none";
+        selected.classList.remove("open");
       }
     });
   }
-
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.custom-select')) {
-      document.querySelectorAll('.options').forEach(o => o.style.display = 'none');
-      document.querySelectorAll('.selected').forEach(s => s.classList.remove('open'));
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".custom-select")) {
+      document.querySelectorAll(".options").forEach(o => o.style.display = "none");
+      document.querySelectorAll(".selected").forEach(s => s.classList.remove("open"));
     }
   });
 }, 100);
