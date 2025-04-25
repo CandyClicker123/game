@@ -72,7 +72,7 @@
         .eggBtns {
             background-color: rgba(255, 0, 0, 0.75);
         }
-        .prestigeBtns {
+        .PBBtns {
             background-color: rgba(255, 0, 0, 1);
         }
         .equipBtns {
@@ -81,7 +81,7 @@
         .locked, .locked:hover, .locked:active {
             background-color: #ddd;
             color: white;
-            cursor: context-menu;
+            cursor: default;
             transform: none;
             opacity: 1;
         }
@@ -108,7 +108,7 @@
             font-size: 16px;
             width: fit-content;
         }
-        .selected:hover, .items:hover, .pets:hover, .equippedPets:hover {
+        .selected:hover, .recentItems:hover, .items:hover, .pets:hover, .equippedPets:hover {
             color: red;
         }
         .areas {
@@ -139,7 +139,7 @@
             user-select: none;
         }
         .selectedItem {
-            width: 130px;
+            width: 150px;
         }
         .selectedPB {
             width: 120px;
@@ -154,7 +154,6 @@
             background-color: white;
             cursor: pointer;
         }
-
         .options {
             display: none;
             position: absolute;
@@ -166,18 +165,19 @@
             z-index: 99;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
-
         .option {
             padding: 10px;
             cursor: pointer;
         }
-
         .option:hover {
             background-color: #f0f0f0;
         }
-
         .custom-select.open .options {
             display: block;
+        }
+        .itemOptions {
+            height: 200px;
+            overflow-y: scroll
         }
     </style>
     <div id="top" style="
@@ -199,7 +199,7 @@
             position: absolute;
             top: 50px;
             left: 50vw;
-            width: 700px;
+            width: 800px;
             transform: translateX(-50%);
             text-align: center;
         ">
@@ -230,8 +230,9 @@
             <button class="itemBtns clickerBtns" id="itemBtn9" title="Produces 1 billion candies per second">Candy mind power</button>
             <br>
             <button class="eggBtns clickerBtns" id="decentEggBtn" onclick="buyDecentEgg()" title="Gives you a common/uncommon/rare/very rare/epic/legendary/exotic pet">Decent egg</button>
-            <button class="eggBtns clickerBtns locked" id="superEggBtn" title="Gives you a rare/very rare/epic/legendary/exotic pet">Super egg</button>
-            <button class="prestigeBtns clickerBtns" id="prestigeBtn" onclick="prestige()" title="Clears everything you have, but your click power will increase">Prestige</button>
+            <button class="eggBtns clickerBtns locked" id="superEggBtn" onclick="buySuperEgg()" title="Gives you a rare/very rare/epic/legendary/exotic pet">Super egg</button>
+            <button class="PBBtns clickerBtns" id="prestigeBtn" onclick="prestige()" title="Clears everything you have, but your click power will increase">Prestige</button>
+            <button class="PBBtns clickerBtns" id="rebirthBtn" onclick="rebirth()" title="Clears everything you have, but your click power will increase">Rebirth</button>
         </div>
         <div id="left" style="
             position: absolute;
@@ -268,17 +269,6 @@
                 <span id="costOfSelectedItem2"></span>
             </div>
             <div class="pdiv">
-                <div class="custom-select selectedPB">
-                  <div class="selected">(Select)</div>
-                  <div class="options">
-                    <div class="option">Prestige</div>
-                    <div class="option">Rebirth</div>
-                  </div>
-                </div>
-                 cost: 
-                <span id="costOfSelectedPB"></span>
-            </div>
-            <div class="pdiv">
                 <div class="custom-select selectedEgg">
                   <div class="selected">(Select)</div>
                   <div class="options">
@@ -289,18 +279,17 @@
                  egg cost: 
                 <span id="costOfSelectedEgg"></span>
             </div>
-            <!-- <p>Candy producer cost: <span id="costOfItem0">10</span></p>
-            <p>Candy tree cost: <span id="costOfItem1">200</span></p>
-            <p>Candy factory cost: <span id="costOfItem2">4000</span></p>
-            <p>Candy alchemist cost: <span id="costOfItem3">80000</span></p>
-            <p>Candy wizard cost: <span id="costOfItem4">1600000</span></p>
-            <p>Candy time machine cost: <span id="costOfItem5">32000000</span></p>
-            <p>Candy treasure cost: <span id="costOfItem6">640000000</span></p>
-            <p>Candy king cost: <span id="costOfItem7">12800000000</span></p>
-            <p>Candy JavaScripter cost: <span id="costOfItem8">256000000000</span></p>
-            <p>Candy mind power cost: <span id="costOfItem9">5120000000000</span></p> -->
-            <p>Decent egg cost: <span id="decentEggCost">1000000</span></p>
-            <p>Prestige cost: <span id="prestigeCost">1000000</span></p>
+            <div class="pdiv">
+                <div class="custom-select selectedPB">
+                  <div class="selected">(Select)</div>
+                  <div class="options">
+                    <div class="option">Prestige</div>
+                    <div class="option">Rebirth</div>
+                  </div>
+                </div>
+                 cost: 
+                <span id="costOfSelectedPB"></span>
+            </div>
         </div>
         <div id="right" style="
             position: absolute;
@@ -311,16 +300,6 @@
             <p>Total clicks: <span id="totalClicks">0</span></p>
             <p>Prestige level: <span id="prestigeLevel">0</p>
             <hr style="width: 200px;" align="right">
-            <!-- <p id="item0" data-name="Candy produer" data-info="AP: 1 cps" class="items">Candy producers x<span id="numOfItem0">0</span></p>
-            <p id="item1" data-name="Candy tree" data-info="AP: 10 cps" class="items">Candy trees x<span id="numOfItem1">0</span></p>
-            <p id="item2" data-name="Candy factory" data-info="AP: 100 cps" class="items">Candy factories x<span id="numOfItem2">0</span></p>
-            <p id="item3" data-name="Candy alchemist" data-info="AP: 1,000 cps" class="items">Candy alchemists x<span id="numOfItem3">0</span></p>
-            <p id="item4" data-name="Candy wizard" data-info="AP: 10,000 cps" class="items">Candy wizards x<span id="numOfItem4">0</span></p>
-            <p id="item5" data-name="Candy time machine" data-info="AP: 100,000 cps" class="items">Candy time machines x<span id="numOfItem5">0</span></p>
-            <p id="item6" data-name="Candy treasure" data-info="AP: 1 million cps" class="items">Candy treasures x<span id="numOfItem6">0</span></p>
-            <p id="item7" data-name="Candy king" data-info="AP: 10 million cps" class="items">Candy kings x<span id="numOfItem7">0</span></p>
-            <p id="item8" data-name="Candy JavaScripter" data-info="AP: 100 million cps" class="items">Candy JavaScripters x<span id="numOfItem8">0</span></p>
-            <p id="item9" data-name="Candy mind power" data-info="AP: 1 billion cps" class="items">Candy mind powers x<span id="numOfItem9">0</span></p> -->
             <div id="recentItemContainer0" class="recentItemContainers">
                 <p id="recentItem0" class="recentItems"><span id="nameOfRecentItem0"></span><span id="numOfRecentItem0">0</span></p>
             </div>
@@ -332,7 +311,7 @@
             </div>
             <button onclick="openInventory()" style="background-color: #444;">Inventory</button>
             <br>
-            <button class="colorBtns" id="blueCandyBtn" onclick="blueCandy()" style="display: none;">Blue candy</button>
+            <button class="colorBtns" id="blueCandyBtn" onclick="blueCandy()" style="display: none;">Cosmetics</button>
         </div>
     </div>
     <div id="inventory" style="display: none;">
@@ -410,6 +389,16 @@
             left: 20px;
         ">
             <h2>Items</h2>
+            <p id="item0" data-name="Candy produer" data-info="AP: 1 cps" class="items">Candy producers<span id="numOfItem0"> x0</span></p>
+            <p id="item1" data-name="Candy tree" data-info="AP: 10 cps" class="items">Candy trees<span id="numOfItem1"> x0</span></p>
+            <p id="item2" data-name="Candy factory" data-info="AP: 100 cps" class="items">Candy factories<span id="numOfItem2"> x0</span></p>
+            <p id="item3" data-name="Candy alchemist" data-info="AP: 1,000 cps" class="items">Candy alchemists<span id="numOfItem3"> x0</span></p>
+            <p id="item4" data-name="Candy wizard" data-info="AP: 10,000 cps" class="items">Candy wizards<span id="numOfItem4"> x0</span></p>
+            <p id="item5" data-name="Candy time machine" data-info="AP: 100,000 cps" class="items">Candy time machines<span id="numOfItem5"> x0</span></p>
+            <p id="item6" data-name="Candy treasure" data-info="AP: 1 million cps" class="items">Candy treasures<span id="numOfItem6"> x0</span></p>
+            <p id="item7" data-name="Candy king" data-info="AP: 10 million cps" class="items">Candy kings<span id="numOfItem7"> x0</span></p>
+            <p id="item8" data-name="Candy JavaScripter" data-info="AP: 100 million cps" class="items">Candy JavaScripters<span id="numOfItem8"> x0</span></p>
+            <p id="item9" data-name="Candy mind power" data-info="AP: 1 billion cps" class="items">Candy mind powers<span id="numOfItem9"> x0</span></p>
         </div>
     </div>
 </body></html>
