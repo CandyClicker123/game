@@ -1,12 +1,14 @@
 var bodyKeydown = false;
-var candies = 0;
-var totalClicks = 0;
-var OCP = 1;
-var ECP = 1;
+var candies = 0n;
+var totalClicks = 0n;
+var OCP = 1n;
+var ECP = 1n;
 var CPE = 1;
-var OAP = 0;
-var EAP = 0;
+var hCPE = 100n;
+var OAP = 0n;
+var EAP = 0n;
 var APE = 1;
+var hAPE = 100n;
 var itemList0 = [ // [0 name, 1 num, 2 cost, 3 ap]
   ["Candy producer"], // 0
   ["Candy tree"], // 1
@@ -20,14 +22,12 @@ var itemList0 = [ // [0 name, 1 num, 2 cost, 3 ap]
   ["Candy mind power"] // 9
 ];
 var itemList;
-var numOfItem = [];
 var recentItems = [];
-var upgradeCost = 50;
-var randomUpgradeCost = 30;
-var impItems = [];
-var decentEggCost = 1000000;
-var superEggCost = 1000000000;
-var prestigeCost = 1000000;
+var upgradeCost = 50n;
+var randomUpgradeCost = 30n;
+var decentEggCost = 1000000n;
+var superEggCost = 1000000000n;
+var prestigeCost = 1000000n;
 var prestigeLevel = 0;
 var equippedPets = [];
 var rarities = ["Common", "Uncommon", "Rare", "Very rare", "Epic", "Legendary", "Exotic"];
@@ -44,24 +44,23 @@ var petList = [ // [0 name, 1 rarity, 2 CPE, 3 APE, 4 SP, 5 num, 6 num of equipp
   ["Pot o' Candy", 2, 2.2, 2.17, "x2 candy parties’ duration"], // 9
   ["Gemdy", 3, 3.2, 2.72, "x1.25 candy treasure’s effect"], // 10
   ["False Dilemma Candy", 3, 0.01, 0.01, 0], // 11
-  ["Failed Experimental Candy", 3, 1.2, 1, "Players can trade 3 of those for 1 rebirth level"], // 12
+  ["Failed Experimental Candy", 3, 1.2, 1, "Players can trade 3 of these for 1 rebirth level"], // 12
   ["Successful Experimental Candy", 4, 3.5, 2.99, "x10.2 candy alchemists and candy time machines’ effects"], // 13
   ["Candy Essence from Nature", 5, 9.78, 8, "x2 egg rewards"], // 14
   ["LORD of CANDIES", 6, 20, 20, "x7 all the other equipped pets’ CPEs and APEs"] // 15
 ]
 var totalClicksAchs = [
-  [10], // 0
-  [314], // 1
-  [1200], // 2
-  [6000], // 3
-  [16180], // 4
-  [36000], // 5
-  [80000] // 6
+  ["Off to a Good Start", 10n, "+2 candies"], // 0
+  ["π", 314n, "+1000 candies"], // 1
+  ["Moving on", 1200n, "+60 cpc OCP"], // 2
+  ["On Greate Pace", 6000n, "+4000 cps OAP"], // 3
+  ["Golden Ratio", 16180n, "1 super egg"], // 4
+  ["Top Clicker", 36000n, "3 super eggs"], // 5
+  ["Clicker God", 80000n, "+1 rebirth level"] // 6
 ];
-var finishedTotalClicksAchs = 0;
 
 for (var i = 0; i < itemList0.length; i++) {
-  itemList0[i].push(0, 20 ** i * 10, 10 ** i);
+  itemList0[i].push(0, BigInt(20 ** i * 10), 10 ** i);
 }
 itemList = itemList0.map(item => [...item]);
 for (var i = 0; i < petList.length; i++) {
@@ -81,9 +80,9 @@ setTimeout(function() {
 
 // Cheat
 if (window.location.href.includes("?")) {
-  var start = Number(prompt("How many candies do you want to start with?"));
+  var start = BigInt(prompt("How many candies do you want to start with?"));
   if (start == "") {
-    candies = 1000000000000;
+    candies = 100000000000000000n;
   } else {
     candies = start;
   }
@@ -93,30 +92,30 @@ function percentage(a) {
   if (candies >= a) {
     return 100;
   } else {
-    return Math.round(candies * 100 / a);
+    return candies * 100n / a;
   }
 }
 
 function word(num) {
-  return toWord(num).toLowerCase();
+  return toWord(BigInt(num)).toLowerCase();
 }
 
 function increase(cost) {
-  return Math.round(cost * 1.2);
+  return cost * 12n / 10n;
 }
 
 function increase2(cost) {
-  return Math.round(cost * 1.6);
+  return cost * 16n / 10n;
 }
 
 function double(cost) {
-  return Math.round(cost * 2);
+  return cost * 2n;
 }
 
 function update() {
-  if (candies == 0) {
+  if (candies == 0n) {
     document.title = "Candy Clicker";
-  } else if (candies == 1) {
+  } else if (candies == 1n) {
     document.title = "1 candy - Candy Clicker"
   } else {
     document.title = word(candies) + " candies - Candy Clicker";
@@ -134,14 +133,14 @@ function update() {
       document.getElementById("equippedPet" + i).removeAttribute("data-id");
     }
   }
-  CPE = Math.round(CPE * 100) / 100;
-  APE = Math.round(APE * 100) / 100;
-  ECP = Math.round(OCP * CPE);
-  EAP = Math.round(OAP * APE);
+  hCPE = BigInt(Math.round(CPE * 100));
+  hAPE = BigInt(Math.round(APE * 100));
+  ECP = OCP * hCPE / 100n;
+  EAP = OAP * hAPE / 100n;
   document.getElementById("candies").innerHTML = word(candies);
   document.getElementById("prestigeLevel").innerHTML = prestigeLevel;
-  document.getElementById("CPE").innerHTML = CPE;
-  document.getElementById("APE").innerHTML = APE;
+  document.getElementById("CPE").innerHTML = Number(hCPE) / 100;
+  document.getElementById("APE").innerHTML = Number(hAPE) / 100;
   document.getElementById("OCP").innerHTML = word(OCP);
   document.getElementById("ECP").innerHTML = word(ECP);
   document.getElementById("OAP").innerHTML = word(OAP);
@@ -184,11 +183,6 @@ function update() {
 setInterval(mainBtns);
 setInterval(update);
 setInterval(function() {
-  if (totalClicks >= totalClicksAchs[finishedTotalClicksAchs]) {
-    totalClicksAch(finishedTotalClicksAchs);
-  }
-})
-setInterval(function() {
   candies += EAP;
 }, 1000)
 
@@ -230,19 +224,24 @@ function mainBtns() {
 function clickCandy() {
   candies += ECP;
   document.getElementById("candies").innerHTML = word(candies);
-  if (candies == 1) {
+  if (candies == 1n) {
     document.getElementById("CANDIES").innerHTML = "candy";
   } else {
     document.getElementById("CANDIES").innerHTML = "candies";
   }
   totalClicks++;
   document.getElementById("totalClicks").innerHTML = totalClicks;
+  for (var i = 0; i < totalClicksAchs.length; i++) {
+    if (totalClicks >= totalClicksAchs[i][1] && totalClicksAchs[i][3] == 0) {
+      totalClicksAch(i);
+    }
+  }
 }
 
 function buyUpgrade() {
   if (candies >= upgradeCost) {
     candies -= upgradeCost;
-    OCP += 5;
+    OCP += 5n;
     upgradeCost = increase(upgradeCost);
     update();
   }
@@ -251,7 +250,7 @@ function buyUpgrade() {
 function buyRandomUpgrade() {
   if (candies >= randomUpgradeCost) {
     candies -= randomUpgradeCost;
-    OCP += Math.floor(Math.random() * 5) + 1;
+    OCP += BigInt(Math.floor(Math.random() * 5) + 1);
     randomUpgradeCost = increase(randomUpgradeCost);
     update();
   }
@@ -262,7 +261,7 @@ function buyItem(item) {
     candies -= itemList[item][2];
     itemList[item][1]++;
     itemList[item][2] = increase(itemList[item][2]);
-    OAP += 10 ** item;
+    OAP += 10n ** BigInt(item);
     for (var i = 0; i < recentItems.length; i++) {
       if (recentItems[i] == item) {
         recentItems.splice(i, 1);
@@ -272,18 +271,6 @@ function buyItem(item) {
       recentItems.pop();
     }
     recentItems.unshift(item);
-    var temp = [];
-    for (var i = 0; i < itemList.length; i++) {
-      if (itemList[i][1] != 0) {
-        temp.push(i)
-      }
-    }
-    console.log(temp);
-    temp.sort((x, y) => itemList[y][1] - itemList[x][1]);
-    impItems = [];
-    for (var i = 0; i < Math.min(5, temp.length); i++) {
-      impItems.push(temp[i]);
-    }
   }
 }
 
@@ -332,8 +319,8 @@ function equipBtns(id) {
   }
 }
 
-function buyDecentEgg() {
-  if (candies >= decentEggCost) {
+function buyDecentEgg(free = false) {
+  if (candies >= decentEggCost || free) {
     var random = Math.random() * 100;
     console.log(random);
     if (random < 12.8) {
@@ -365,14 +352,16 @@ function buyDecentEgg() {
     } else {
       pet(15);
     }
-    candies -= decentEggCost;
-    decentEggCost = increase2(decentEggCost);
+    if (!free) {
+      candies -= decentEggCost;
+      decentEggCost = increase2(decentEggCost);
+    }
     document.getElementById("candies").innerHTML = candies;
   }
 }
 
-function buySuperEgg() {
-  if (candies >= superEggCost) {
+function buySuperEgg(free = false) {
+  if (candies >= superEggCost || free) {
     var random = Math.random() * 100;
     console.log(random);
     if (random < 22.5) {
@@ -388,33 +377,52 @@ function buySuperEgg() {
     } else {
       pet(15);
     }
-    candies -= superEggCost;
-    superEggCost = increase2(superEggCost);
+    if (!free) {
+      candies -= superEggCost;
+      superEggCost = increase2(superEggCost);
+    }
     document.getElementById("candies").innerHTML = candies;
   }
 }
 
 function totalClicksAch(ach) {
+  alert("Achievement unlocked: " + totalClicksAchs[ach][0] + "\nYou reached " + totalClicksAchs[ach][1] + " total clicks.\nReward: " + totalClicksAchs[ach][2]);
+  totalClicksAchs[ach][3] = 1;
   if (ach == 0) {
-    alert("Achievement unlocked!\n");
+    candies += 2n;
+  } else if (ach == 1) {
+    candies += 1000n;
+  } else if (ach == 2) {
+    OCP += 60n;
+  } else if (ach == 3) {
+    OAP += 4000n;
+  } else if (ach == 4) {
+    buySuperEgg(true);
+  } else if (ach == 5) {
+    buySuperEgg(true);
+    buySuperEgg(true);
+    buySuperEgg(true);
+  } else if (ach == 6) {
+    rebirth(true);
   }
 }
 
-function prestige() {
+function buyPrestige(free = false) {
   if (candies >= prestigeCost) {
-    OAP *= 2;
-    OCP *= 2;
-    candies = 0;
-    upgradeCost = 50;
-    randomUpgradeCost = 30;
+    OAP *= 2n;
+    OCP *= 2n;
+    candies = 0n;
+    upgradeCost = 50n;
+    randomUpgradeCost = 30n;
     itemList = itemList0.map(item => [...item]);
+    recentItems = [];
     prestigeLevel++;
-    prestigeCost *= 2;
+    prestigeCost *= 2n;
     update();
   }
 }
 
-function rebirth() {
+function buyRebirth(free = false) {
 
 }
 
@@ -437,25 +445,37 @@ function openInventory() {
     left: 0,
     behavior: "smooth"
   });
-  console.log("wait ")
   for (var i = 0; i < itemList.length; i++) {
     document.getElementById("numOfItem" + i).innerHTML = " x" + itemList[i][1];
   }
 }
 
 function openItemsPage() {
-  document.getElementById("petsPage").style.display = "none";
-  closePetPage();
   document.getElementById("itemsPageBtn").style.display = "none";
   document.getElementById("itemsPage").style.display = "block";
   document.getElementById("petsPageBtn").style.display = "inline-block";
+  document.getElementById("petsPage").style.display = "none";
+  document.getElementById("achPageBtn").style.display = "inline-block";
+  document.getElementById("achPage").style.display = "none";
+  closePetPage();
 }
 
 function openPetsPage() {
+  document.getElementById("itemsPageBtn").style.display = "inline-block";
   document.getElementById("itemsPage").style.display = "none";
   document.getElementById("petsPageBtn").style.display = "none";
   document.getElementById("petsPage").style.display = "block";
+  document.getElementById("achPageBtn").style.display = "inline-block";
+  document.getElementById("achPage").style.display = "none";
+}
+
+function openAchPage() {
   document.getElementById("itemsPageBtn").style.display = "inline-block";
+  document.getElementById("itemsPage").style.display = "none";
+  document.getElementById("petsPageBtn").style.display = "inline-block";
+  document.getElementById("petsPage").style.display = "none";
+  document.getElementById("achPageBtn").style.display = "none";
+  document.getElementById("achPage").style.display = "block";
 }
 
 function openPetPage(id) {
