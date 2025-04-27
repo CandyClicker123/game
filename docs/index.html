@@ -231,8 +231,8 @@
             <br>
             <button class="eggBtns clickerBtns" id="decentEggBtn" onclick="buyDecentEgg()" title="Gives you a common/uncommon/rare/very rare/epic/legendary/exotic pet">Decent egg</button>
             <button class="eggBtns clickerBtns locked" id="superEggBtn" onclick="buySuperEgg()" title="Gives you a rare/very rare/epic/legendary/exotic pet">Super egg</button>
-            <button class="PBBtns clickerBtns" id="prestigeBtn" onclick="prestige()" title="Clears everything you have, but your click power will increase">Prestige</button>
-            <button class="PBBtns clickerBtns" id="rebirthBtn" onclick="rebirth()" title="Clears everything you have, but your click power will increase">Rebirth</button>
+            <button class="PBBtns clickerBtns" id="prestigeBtn" onclick="buyPrestige()" title="Clears everything you have, but your click power will increase">Prestige</button>
+            <button class="PBBtns clickerBtns" id="rebirthBtn" onclick="buyRebirth()" title="Clears everything you have, but your click power will increase">Rebirth</button>
         </div>
         <div id="left" style="
             position: absolute;
@@ -323,7 +323,25 @@
         ">
             <button id="itemsPageBtn" onclick="openItemsPage()" style="background-color: #444; display: none;">Items</button>
             <button id="petsPageBtn" onclick="openPetsPage()" style="background-color: #444;">Pets</button>
+            <button id="achPageBtn" onclick="openAchPage()" style="background-color: #444;">Achievements</button>
             <button onclick="openMainPage()" style="background-color: #444;">Main page</button>
+        </div>
+        <div id="itemsPage" style="
+            position: absolute;
+            top: 120px;
+            left: 20px;
+        ">
+            <h2>Items</h2>
+            <p id="item0" data-name="Candy produer" data-info="AP: 1 cps" class="items">Candy producers<span id="numOfItem0"> x0</span></p>
+            <p id="item1" data-name="Candy tree" data-info="AP: 10 cps" class="items">Candy trees<span id="numOfItem1"> x0</span></p>
+            <p id="item2" data-name="Candy factory" data-info="AP: 100 cps" class="items">Candy factories<span id="numOfItem2"> x0</span></p>
+            <p id="item3" data-name="Candy alchemist" data-info="AP: 1,000 cps" class="items">Candy alchemists<span id="numOfItem3"> x0</span></p>
+            <p id="item4" data-name="Candy wizard" data-info="AP: 10,000 cps" class="items">Candy wizards<span id="numOfItem4"> x0</span></p>
+            <p id="item5" data-name="Candy time machine" data-info="AP: 100,000 cps" class="items">Candy time machines<span id="numOfItem5"> x0</span></p>
+            <p id="item6" data-name="Candy treasure" data-info="AP: 1 million cps" class="items">Candy treasures<span id="numOfItem6"> x0</span></p>
+            <p id="item7" data-name="Candy king" data-info="AP: 10 million cps" class="items">Candy kings<span id="numOfItem7"> x0</span></p>
+            <p id="item8" data-name="Candy JavaScripter" data-info="AP: 100 million cps" class="items">Candy JavaScripters<span id="numOfItem8"> x0</span></p>
+            <p id="item9" data-name="Candy mind power" data-info="AP: 1 billion cps" class="items">Candy mind powers<span id="numOfItem9"> x0</span></p>
         </div>
         <div id="petsPage" style="display: none;">
             <div id="ownedPets" style="
@@ -383,22 +401,6 @@
                 <button onclick="closePetPage()" style="background-color: #444;">Back</button>
             </div>
         </div>
-        <div id="itemsPage" style="
-            position: absolute;
-            top: 120px;
-            left: 20px;
-        ">
-            <h2>Items</h2>
-            <p id="item0" data-name="Candy produer" data-info="AP: 1 cps" class="items">Candy producers<span id="numOfItem0"> x0</span></p>
-            <p id="item1" data-name="Candy tree" data-info="AP: 10 cps" class="items">Candy trees<span id="numOfItem1"> x0</span></p>
-            <p id="item2" data-name="Candy factory" data-info="AP: 100 cps" class="items">Candy factories<span id="numOfItem2"> x0</span></p>
-            <p id="item3" data-name="Candy alchemist" data-info="AP: 1,000 cps" class="items">Candy alchemists<span id="numOfItem3"> x0</span></p>
-            <p id="item4" data-name="Candy wizard" data-info="AP: 10,000 cps" class="items">Candy wizards<span id="numOfItem4"> x0</span></p>
-            <p id="item5" data-name="Candy time machine" data-info="AP: 100,000 cps" class="items">Candy time machines<span id="numOfItem5"> x0</span></p>
-            <p id="item6" data-name="Candy treasure" data-info="AP: 1 million cps" class="items">Candy treasures<span id="numOfItem6"> x0</span></p>
-            <p id="item7" data-name="Candy king" data-info="AP: 10 million cps" class="items">Candy kings<span id="numOfItem7"> x0</span></p>
-            <p id="item8" data-name="Candy JavaScripter" data-info="AP: 100 million cps" class="items">Candy JavaScripters<span id="numOfItem8"> x0</span></p>
-            <p id="item9" data-name="Candy mind power" data-info="AP: 1 billion cps" class="items">Candy mind powers<span id="numOfItem9"> x0</span></p>
-        </div>
+        <div id="achPage" style="display: none;"></div>
     </div>
 </body></html>
