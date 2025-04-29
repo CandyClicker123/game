@@ -50,12 +50,12 @@ var petList = [ // [0 name, 1 rarity, 2 CPE, 3 APE, 4 SP, 5 num, 6 num of equipp
   ["LORD of CANDIES", 6, 20, 20, "x7 all the other equipped pets’ CPEs and APEs"] // 15
 ]
 var totalClicksAchs = [
-  ["Off to a Good Start", 10n, "+2 candies"], // 0
-  ["π", 314n, "+1000 candies"], // 1
+  ["Off to a Good Start", 10n, "candy x2"], // 0
+  ["π", 314n, "candy x1000"], // 1
   ["Moving on", 1200n, "+60 cpc OCP"], // 2
   ["On Greate Pace", 6000n, "+4000 cps OAP"], // 3
-  ["Golden Ratio", 16180n, "1 super egg"], // 4
-  ["Top Clicker", 36000n, "3 super eggs"], // 5
+  ["Golden Ratio", 16180n, "super egg x1"], // 4
+  ["Top Clicker", 36000n, "super egg x3"], // 5
   ["Clicker God", 80000n, "+1 rebirth level"] // 6
 ];
 
@@ -133,6 +133,8 @@ function update() {
       document.getElementById("equippedPet" + i).removeAttribute("data-id");
     }
   }
+  CPE *= 2 ** prestigeLevel;
+  APE *= 2 ** prestigeLevel;
   hCPE = BigInt(Math.round(CPE * 100));
   hAPE = BigInt(Math.round(APE * 100));
   ECP = OCP * hCPE / 100n;
@@ -386,7 +388,7 @@ function buySuperEgg(free = false) {
 }
 
 function totalClicksAch(ach) {
-  alert("Achievement unlocked: " + totalClicksAchs[ach][0] + "\nYou reached " + totalClicksAchs[ach][1] + " total clicks.\nReward: " + totalClicksAchs[ach][2]);
+  alert("Achievement unlocked: " + totalClicksAchs[ach][0] + "\nYou've reached " + totalClicksAchs[ach][1] + " total clicks.\nReward: " + totalClicksAchs[ach][2]);
   totalClicksAchs[ach][3] = 1;
   if (ach == 0) {
     candies += 2n;
@@ -409,8 +411,8 @@ function totalClicksAch(ach) {
 
 function buyPrestige(free = false) {
   if (candies >= prestigeCost) {
-    OAP *= 2n;
-    OCP *= 2n;
+    OCP = 1n;
+    OAP = 0n;
     candies = 0n;
     upgradeCost = 50n;
     randomUpgradeCost = 30n;
@@ -429,6 +431,7 @@ function buyRebirth(free = false) {
 function openMainPage() {
   document.getElementById("inventory").style.display = "none";
   closePetPage();
+  document.getElementById("achPage").style.display = "none";
   document.getElementById("main").style.display = "block";
   scroll({
     top: 0,
@@ -450,13 +453,22 @@ function openInventory() {
   }
 }
 
+
+function openAchPage() {
+  document.getElementById("main").style.display = "none";
+  document.getElementById("achPage").style.display = "block";
+  scroll({
+    top: 0,
+    left: 0,
+    behavior: "smooth"
+  });
+}
+
 function openItemsPage() {
   document.getElementById("itemsPageBtn").style.display = "none";
   document.getElementById("itemsPage").style.display = "block";
   document.getElementById("petsPageBtn").style.display = "inline-block";
   document.getElementById("petsPage").style.display = "none";
-  document.getElementById("achPageBtn").style.display = "inline-block";
-  document.getElementById("achPage").style.display = "none";
   closePetPage();
 }
 
@@ -465,17 +477,6 @@ function openPetsPage() {
   document.getElementById("itemsPage").style.display = "none";
   document.getElementById("petsPageBtn").style.display = "none";
   document.getElementById("petsPage").style.display = "block";
-  document.getElementById("achPageBtn").style.display = "inline-block";
-  document.getElementById("achPage").style.display = "none";
-}
-
-function openAchPage() {
-  document.getElementById("itemsPageBtn").style.display = "inline-block";
-  document.getElementById("itemsPage").style.display = "none";
-  document.getElementById("petsPageBtn").style.display = "inline-block";
-  document.getElementById("petsPage").style.display = "none";
-  document.getElementById("achPageBtn").style.display = "none";
-  document.getElementById("achPage").style.display = "block";
 }
 
 function openPetPage(id) {
