@@ -112,6 +112,21 @@ function double(cost) {
   return cost * 2n;
 }
 
+function title(str) {
+  if (!str) {
+    return "";
+  }
+  return str[0].toUpperCase() + str.slice(1);
+}
+
+function scrollSmoothly() {
+  scroll({
+    top: 0,
+    left: 0,
+    behavior: "smooth"
+  });
+}
+
 function update() {
   if (candies == 0n) {
     document.title = "Candy Clicker";
@@ -433,21 +448,13 @@ function openMainPage() {
   closePetPage();
   document.getElementById("achPage").style.display = "none";
   document.getElementById("main").style.display = "block";
-  scroll({
-    top: 0,
-    left: 0,
-    behavior: "smooth"
-  });
+  scrollSmoothly();
 }
 
 function openInventory() {
   document.getElementById("main").style.display = "none";
   document.getElementById("inventory").style.display = "block";
-  scroll({
-    top: 0,
-    left: 0,
-    behavior: "smooth"
-  });
+  scrollSmoothly();
   for (var i = 0; i < itemList.length; i++) {
     document.getElementById("numOfItem" + i).innerHTML = " x" + itemList[i][1];
   }
@@ -457,11 +464,21 @@ function openInventory() {
 function openAchPage() {
   document.getElementById("main").style.display = "none";
   document.getElementById("achPage").style.display = "block";
-  scroll({
-    top: 0,
-    left: 0,
-    behavior: "smooth"
-  });
+  for (var i = 0; i < document.getElementsByClassName("achRow").length;) {
+    document.getElementsByClassName("achRow")[0].remove();
+  }
+  for (var i = 0; i < totalClicksAchs.length; i++) {
+    var newAch = document.createElement("tr");
+    for (var j = 0; j < 3; j++) {
+      newAch.appendChild(document.createElement("td"));
+    }
+    newAch.children[0].innerHTML = totalClicksAchs[i][0];
+    newAch.children[1].innerHTML = "Reaching " + totalClicksAchs[i][1] + " total clicks";
+    newAch.children[2].innerHTML = title(totalClicksAchs[i][2]);
+    newAch.classList.add("achRow");
+    document.getElementById("achTbody").appendChild(newAch);
+  }
+  scrollSmoothly();
 }
 
 function openItemsPage() {
@@ -469,7 +486,9 @@ function openItemsPage() {
   document.getElementById("itemsPage").style.display = "block";
   document.getElementById("petsPageBtn").style.display = "inline-block";
   document.getElementById("petsPage").style.display = "none";
+  scrollSmoothly();
   closePetPage();
+
 }
 
 function openPetsPage() {
@@ -477,17 +496,14 @@ function openPetsPage() {
   document.getElementById("itemsPage").style.display = "none";
   document.getElementById("petsPageBtn").style.display = "none";
   document.getElementById("petsPage").style.display = "block";
+  scrollSmoothly();
 }
 
 function openPetPage(id) {
   if (id != undefined) {
     document.getElementById("ownedPets").style.display = "none";
     document.getElementById("petPage").style.display = "block";
-    scroll({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
-    });
+    scrollSmoothly();
     document.getElementById("petPage_name").innerHTML = rarities[petList[id][1]] + " - " + petList[id][0];
     document.getElementById("petPage_id").innerHTML = id;
     try {
@@ -513,11 +529,7 @@ function openPetPage(id) {
 function closePetPage() {
   document.getElementById("petPage").style.display = "none";
   document.getElementById("ownedPets").style.display = "block";
-  scroll({
-    top: 0,
-    left: 0,
-    behavior: "smooth"
-  });
+  scrollSmoothly();
 }
 
 function candyFlipped() {
