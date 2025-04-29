@@ -64,27 +64,42 @@
         }
         table {
             border-collapse: separate;
+            border-spacing: 0;
         }
         td, th {
             font-size: 16px;
             border: 2px solid #ddd;
             padding: 10px;
+            text-align: left;
         }
-        /*第一欄第一列：左上*/
-        tr:first-child th:first-child{
-          border-top-left-radius: 10px;
+        tr:first-child th:first-child {
+            border-top-left-radius: 10px;
+            border-width: 4px 2px 2px 4px;
         }
-        /*第一欄最後列：左下*/
-        tr:last-child td:first-child{
-          border-bottom-left-radius: 10px;
+        tr:last-child td:first-child {
+            border-bottom-left-radius: 10px;
+            border-width: 2px 2px 4px 4px;
         }
-        /*最後欄第一列：右上*/
-        tr:first-child th:last-child{
-          border-top-right-radius: 10px;
+        tr:first-child th:last-child {
+            border-top-right-radius: 10px;
+            border-width: 4px 4px 2px 2px;
         }
-        /*最後欄第一列：右下*/
-        tr:last-child td:last-child{
-          border-bottom-right-radius: 10px;
+        tr:last-child td:last-child {
+            border-bottom-right-radius: 10px;
+            border-width: 2px 4px 4px 2px;
+        }
+        tr:first-child th {
+            border-top-width: 4px;
+        }
+        tr:last-child td {
+            border-bottom-width: 4px;
+        }
+        tr th:first-child, tr td:first-child {
+            border-left-width: 4px;
+        }
+
+        tr th:last-child, tr td:last-child {
+            border-right-width: 4px;
         }
         .normalUpgradeBtns {
             background-color: rgba(255, 0, 0, 0.25);
@@ -441,12 +456,14 @@
             top: 140px;
             left: 20px;
         ">
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Requirement</th>
-                    <th>Reward</th>
-                </tr>
+            <table id="achTable">
+                <tbody id="achTbody">
+                    <tr>
+                        <th>Name</th>
+                        <th>Requirement</th>
+                        <th>Reward</th>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
