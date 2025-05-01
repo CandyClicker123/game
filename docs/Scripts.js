@@ -435,7 +435,7 @@ function buyPrestige(free = false) {
     itemList = itemList0.map(item => [...item]);
     recentItems = [];
     prestigeLevel++;
-    prestigeCost *= 2n;
+    prestigeCost *= 10n;
     update();
   }
 }
