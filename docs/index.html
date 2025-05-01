@@ -449,13 +449,20 @@
             right: 30px;
             top: 80px;
         ">
+            <button id="achPageBtn0" data-page="0" style="background-color: #444; display: none;">Total clicks</button>
+            <button id="achPageBtn1" data-page="1" style="background-color: #444;">Click power</button>
+            <button id="achPageBtn2" data-page="2" style="background-color: #444;">Auto production</button>
+            <button id="achPageBtn3" data-page="3" style="background-color: #444;">Collections</button>
+            <button id="achPageBtn4" data-page="4" style="background-color: #444;">Candies</button>
+            <button id="achPageBtn5" data-page="5" style="background-color: #444;">Secret</button>
             <button onclick="openMainPage()" style="background-color: #444;">Main page</button>
         </div>
-        <div style="
+        <div id="specificAchPage" style="
             position: absolute;
-            top: 140px;
+            top: 120px;
             left: 20px;
         ">
+            <h2 id="achCategory">Total Clicks Achievements</h2>
             <table id="achTable">
                 <tbody id="achTbody">
                     <tr>
