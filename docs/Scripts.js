@@ -49,11 +49,12 @@ var petList = [ // [0 name, 1 rarity, 2 CPE, 3 APE, 4 SP, 5 num, 6 num of equipp
   ["Candy Essence from Nature", 5, 9.78, 8, "x2 egg rewards"], // 14
   ["LORD of CANDIES", 6, 20, 20, "x7 all the other equipped pets’ CPEs and APEs"] // 15
 ]
+var achCategories = ["Total Clicks", "Click Power", "Auto Production", "Collections", "Candies", "Secret"];
 var totalClicksAchs = [
   ["Off to a Good Start", 10n, "candy x2"], // 0
   ["π", 314n, "candy x1000"], // 1
   ["Moving on", 1200n, "+60 cpc OCP"], // 2
-  ["On Greate Pace", 6000n, "+4000 cps OAP"], // 3
+  ["On Great Pace", 6000n, "+4000 cps OAP"], // 3
   ["Golden Ratio", 16180n, "super egg x1"], // 4
   ["Top Clicker", 36000n, "super egg x3"], // 5
   ["Clicker God", 80000n, "+1 rebirth level"] // 6
@@ -420,7 +421,7 @@ function totalClicksAch(ach) {
     buySuperEgg(true);
     buySuperEgg(true);
   } else if (ach == 6) {
-    rebirth(true);
+    buyRebirth(true);
   }
 }
 
@@ -460,23 +461,42 @@ function openInventory() {
   }
 }
 
-
 function openAchPage() {
   document.getElementById("main").style.display = "none";
   document.getElementById("achPage").style.display = "block";
+  openSpecificAchPage(0);
+}
+
+function openSpecificAchPage(page) {
+  for (var i = 0; i < achCategories.length; i++) {
+    if (i == page) {
+      document.getElementById("achPageBtn" + i).style.display = "none";
+    } else {
+      document.getElementById("achPageBtn" + i).style.display = "inline-block";
+    }
+  }
+  document.getElementById("achCategory").innerHTML = achCategories[page] + " Achievements";
   for (var i = 0; i < document.getElementsByClassName("achRow").length;) {
     document.getElementsByClassName("achRow")[0].remove();
   }
-  for (var i = 0; i < totalClicksAchs.length; i++) {
-    var newAch = document.createElement("tr");
-    for (var j = 0; j < 3; j++) {
-      newAch.appendChild(document.createElement("td"));
+  if (page == 0) {
+    for (var i = 0; i < totalClicksAchs.length; i++) {
+      var newAch = document.createElement("tr");
+      for (var j = 0; j < 3; j++) {
+        newAch.appendChild(document.createElement("td"));
+      }
+      if (totalClicksAchs[i][3] == 0) {
+        newAch.children[0].innerHTML = "???";
+        newAch.children[2].innerHTML = "???";
+      } else {
+        newAch.children[0].innerHTML = totalClicksAchs[i][0];
+        newAch.children[2].innerHTML = title(totalClicksAchs[i][2]);
+
+      }
+      newAch.children[1].innerHTML = "Reaching " + totalClicksAchs[i][1] + " total clicks";
+      newAch.classList.add("achRow");
+      document.getElementById("achTbody").appendChild(newAch);
     }
-    newAch.children[0].innerHTML = totalClicksAchs[i][0];
-    newAch.children[1].innerHTML = "Reaching " + totalClicksAchs[i][1] + " total clicks";
-    newAch.children[2].innerHTML = title(totalClicksAchs[i][2]);
-    newAch.classList.add("achRow");
-    document.getElementById("achTbody").appendChild(newAch);
   }
   scrollSmoothly();
 }
@@ -623,6 +643,13 @@ setTimeout(function() {
       unequip(Number(document.getElementById("petPage_id").innerHTML));
     }
   })
+
+  // An achievement page button is clicked
+  for (var i = 0; i < achCategories.length; i++) {
+    document.getElementById("achPageBtn" + i).addEventListener("click", function() {
+      openSpecificAchPage(this.dataset.page);
+    });
+  }
 
   // A key is pressed
   document.body.addEventListener("keydown", function() {
