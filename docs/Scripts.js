@@ -71,11 +71,12 @@ for (var i = 0; i < totalClicksAchs.length; i++) {
   totalClicksAchs[i].push(0);
 }
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("SW.js")
-    .then(() => console.log("SW success"))
-    .catch(err => console.log("SW failure", err));
-}
+// PWA
+// if ("serviceWorker" in navigator) {
+//   navigator.serviceWorker.register("SW.js")
+//     .then(() => console.log("SW success"))
+//     .catch(err => console.log("SW failure", err));
+// }
 
 setTimeout(function() {
   for (var i = 0; i < document.getElementsByClassName("petName").length; i++) {
