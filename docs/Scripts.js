@@ -29,6 +29,8 @@ var decentEggCost = 1000000n;
 var superEggCost = 1000000000n;
 var prestigeCost = 1000000n;
 var prestigeLevel = 0;
+var prestigeLimit = 10;
+var rebirthLevel = 0;
 var equippedPets = [];
 var rarities = ["Common", "Uncommon", "Rare", "Very rare", "Epic", "Legendary", "Exotic"];
 var petList = [ // [0 name, 1 rarity, 2 CPE, 3 APE, 4 SP, 5 num, 6 num of equipped]
@@ -239,7 +241,7 @@ function mainBtns() {
   } else {
     document.getElementById("superEggBtn").classList.add("locked");
   }
-  if (candies >= prestigeCost) {
+  if (candies >= prestigeCost && prestigeLevel < prestigeLimit) {
     document.getElementById("prestigeBtn").classList.remove("locked");
   } else {
     document.getElementById("prestigeBtn").classList.add("locked");
@@ -428,12 +430,12 @@ function totalClicksAch(ach) {
     buySuperEgg(true);
     buySuperEgg(true);
   } else if (ach == 6) {
-    buyRebirth(true);
+    rebirthLevel++;
   }
 }
 
-function buyPrestige(free = false) {
-  if (candies >= prestigeCost) {
+function buyPrestige() {
+  if (candies >= prestigeCost && prestigeLevel < prestigeLimit) {
     OCP = 1n;
     OAP = 0n;
     candies = 0n;
@@ -447,7 +449,7 @@ function buyPrestige(free = false) {
   }
 }
 
-function buyRebirth(free = false) {
+function buyRebirth() {
 
 }
 
