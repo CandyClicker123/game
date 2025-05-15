@@ -55,12 +55,30 @@ var achCategories = ["Total Clicks", "Click Power", "Auto Production", "Collecti
 var totalClicksAchs = [
   ["Off to a Good Start", 10n, "candy x2"], // 0
   ["π", 314n, "candy x1000"], // 1
-  ["Moving on", 1200n, "+60 cpc OCP"], // 2
+  ["Moving On", 1200n, "+60 cpc OCP"], // 2
   ["On Great Pace", 6000n, "+4000 cps OAP"], // 3
   ["Golden Ratio", 16180n, "super egg x1"], // 4
   ["Top Clicker", 36000n, "super egg x3"], // 5
   ["Clicker God", 80000n, "+1 rebirth level"] // 6
 ];
+var eCPAchs = [
+  ["Baby Cursor", 11n, "+2 cps OAP"], // 0
+  ["Elementary Cursor", 450n, "+50 cps OAP"], // 1
+  ["Medium Cursor", 6800n, "decent egg x1"], // 2
+  ["Euler's Cursor", 271828n, "+6000 cps OAP"], // 3
+  ["Gigantic Cursor", 3800000n, "+100000 cpc OCP"], // 4
+  ["Universal Cursor", 56000000n, "chocolate super egg x1"], // 5
+  ["Immortal Cursor", 800000000n, "+1 rebirth level"] // 6
+]
+var eAPAchs = [
+  ["1 Candy, 2 Candies, 3 Candies, ...", 1n, "candy x5"], // 0
+  ["Getting Productive", 50n, "+10 cpc OCP"], // 1
+  ["Efficient Candy Flow", 2000n, "lottery ticket x1"], // 2
+  ["Fountain of Candies", 60000, "decent egg x1"], // 3
+  ["Speed Mastery", 10000000n, "+154000 cpc OCP"], // 4
+  ["Raining Candies", 800000000n, "super egg x1"], // 5
+  ["AP Greatness", 100000000000000n, "+3 prestige levels"] // 6
+]
 
 for (var i = 0; i < itemList0.length; i++) {
   itemList0[i].push(0, BigInt(20 ** i * 10), 10 ** i);
@@ -71,6 +89,12 @@ for (var i = 0; i < petList.length; i++) {
 }
 for (var i = 0; i < totalClicksAchs.length; i++) {
   totalClicksAchs[i].push(0);
+}
+for (var i = 0; i < eCPAchs.length; i++) {
+  eCPAchs[i].push(0);
+}
+for (var i = 0; i < eAPAchs.length; i++) {
+  eAPAchs[i].push(0);
 }
 
 // PWA
@@ -164,6 +188,16 @@ function update() {
   hAPE = BigInt(Math.round(APE * 100));
   ECP = OCP * hCPE / 100n;
   EAP = OAP * hAPE / 100n;
+  for (var i = 0; i < eCPAchs.length; i++) {
+    if (ECP >= eCPAchs[i][1] && eCPAchs[i][3] == 0) {
+      CPAch(i);
+    }
+  }
+  for (var i = 0; i < eAPAchs.length; i++) {
+    if (EAP >= eAPAchs[i][1] && eAPAchs[i][3] == 0) {
+      APAch(i);
+    }
+  }
   document.getElementById("candies").innerHTML = word(candies);
   document.getElementById("prestigeLevel").innerHTML = prestigeLevel;
   document.getElementById("CPE").innerHTML = Number(hCPE) / 100;
@@ -257,7 +291,7 @@ function clickCandy() {
     document.getElementById("CANDIES").innerHTML = "candies";
   }
   totalClicks++;
-  document.getElementById("totalClicks").innerHTML = totalClicks;
+  document.getElementById("totalClicks").innerHTML = word(totalClicks);
   for (var i = 0; i < totalClicksAchs.length; i++) {
     if (totalClicks >= totalClicksAchs[i][1] && totalClicksAchs[i][3] == 0) {
       totalClicksAch(i);
@@ -434,6 +468,66 @@ function totalClicksAch(ach) {
   }
 }
 
+function CPAch(ach) {
+  alert("Achievement unlocked: " + eCPAchs[ach][0] + "\nYou've reached " + eCPAchs[ach][1] + " cpc OCP.\nReward: " + eCPAchs[ach][2]);
+  eCPAchs[ach][3] = 1;
+  if (ach == 0) {
+    OAP += 2n;
+  } else if (ach == 1) {
+    OAP += 50n;
+  } else if (ach == 2) {
+    buyDecentEgg(true);
+  } else if (ach == 3) {
+    OAP += 6000n;
+  } else if (ach == 4) {
+    OCP += 100000n;
+  } else if (ach == 5) {
+    // Chocolate super egg x1
+  } else if (ach == 6) {
+    rebirthLevel++;
+  }
+}
+
+function APAch(ach) {
+  alert("Achievement unlocked: " + eAPAchs[ach][0] + "\nYou've reached " + eAPAchs[ach][1] + " cpc OCP.\nReward: " + eAPAchs[ach][2]);
+  eAPAchs[ach][3] = 1;
+  if (ach == 0) {
+    OAP += 2n;
+  } else if (ach == 1) {
+    OAP += 50n;
+  } else if (ach == 2) {
+    buyDecentEgg(true);
+  } else if (ach == 3) {
+    OAP += 6000n;
+  } else if (ach == 4) {
+    OCP += 100000n;
+  } else if (ach == 5) {
+    // Chocolate super egg x1
+  } else if (ach == 6) {
+    rebirthLevel++;
+  }
+}
+
+function createAchRow(arr, func) {
+  for (var i = 0; i < arr.length; i++) {
+    var newAch = document.createElement("tr");
+    for (var j = 0; j < 3; j++) {
+      newAch.appendChild(document.createElement("td"));
+    }
+    if (arr[i][3] == 0) {
+      newAch.children[0].innerHTML = "???";
+      newAch.children[2].innerHTML = "???";
+    } else {
+      newAch.children[0].innerHTML = arr[i][0];
+      newAch.children[2].innerHTML = title(arr[i][2]);
+
+    }
+    newAch.children[1].innerHTML = func(i);
+    newAch.classList.add("achRow");
+    document.getElementById("achTbody").appendChild(newAch);
+  }
+}
+
 function buyPrestige() {
   if (candies >= prestigeCost && prestigeLevel < prestigeLimit) {
     OCP = 1n;
@@ -489,23 +583,11 @@ function openSpecificAchPage(page) {
     document.getElementsByClassName("achRow")[0].remove();
   }
   if (page == 0) {
-    for (var i = 0; i < totalClicksAchs.length; i++) {
-      var newAch = document.createElement("tr");
-      for (var j = 0; j < 3; j++) {
-        newAch.appendChild(document.createElement("td"));
-      }
-      if (totalClicksAchs[i][3] == 0) {
-        newAch.children[0].innerHTML = "???";
-        newAch.children[2].innerHTML = "???";
-      } else {
-        newAch.children[0].innerHTML = totalClicksAchs[i][0];
-        newAch.children[2].innerHTML = title(totalClicksAchs[i][2]);
-
-      }
-      newAch.children[1].innerHTML = "Reaching " + totalClicksAchs[i][1] + " total clicks";
-      newAch.classList.add("achRow");
-      document.getElementById("achTbody").appendChild(newAch);
-    }
+    createAchRow(totalClicksAchs, i => "Reaching " + word(totalClicksAchs[i][1]) + " total clicks");
+  } else if (page == 1) {
+    createAchRow(eCPAchs, i => "Reaching " + word(eCPAchs[i][1]) + " cpc ECP");
+  } else if (page == 2) {
+    createAchRow(eAPAchs, i => "Reaching " + word(eAPAchs[i][1]) + " cps EAP");
   }
   scrollSmoothly();
 }
