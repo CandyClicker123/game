@@ -35,23 +35,23 @@ var equippedPets = [];
 var rarities = ["Common", "Uncommon", "Rare", "Very rare", "Epic", "Legendary", "Exotic"];
 var petList = [ // [0 name, 1 rarity, 2 CPE, 3 APE, 4 SP, 5 num, 6 num of equipped]
   ["Candy Cane", 0, 1.2, 1.2, 0], // 0
-  ["Candy Cat", 0, 1.1, 1.3, "x2 candy producers’ effect"], // 1
+  ["Candy Cat", 0, 1.1, 1.3, "x2 candy producer's effect"], // 1
   ["Candy Monster", 0, 1.5, 1, 0], // 2
   ["Slimy Candy", 0, 1.4, 1.1, 0], // 3
   ["Triangular Candy", 0, 3, 0.3, 0], // 4
   ["C & Y", 1, 2, 1, 0], // 5
   ["Heart Candy", 1, 1.74, 1.32, 0], // 6
-  ["Stoni Candy", 1, 1.6, 1.2, "x0.5 candy trees’ effect"], // 7
-  ["Pixelized Candy", 2, 2.8, 1.86, "x1.4 events’ effects"], // 8
-  ["Pot o' Candy", 2, 2.2, 2.17, "x2 candy parties’ duration"], // 9
-  ["Gemdy", 3, 3.2, 2.72, "x1.25 candy treasure’s effect"], // 10
+  ["Stoni Candy", 1, 1.6, 1.2, "x0.5 candy tree's effect"], // 7
+  ["Pixelized Candy", 2, 2.8, 1.86, "x1.4 events' effects"], // 8
+  ["Pot o' Candy", 2, 2.2, 2.17, "x2 candy parties' duration"], // 9
+  ["Gemdy", 3, 3.2, 2.72, "x1.25 candy treasure's effect"], // 10
   ["False Dilemma Candy", 3, 0.01, 0.01, 0], // 11
   ["Failed Experimental Candy", 3, 1.2, 1, "Players can trade 3 of these for 1 rebirth level"], // 12
-  ["Successful Experimental Candy", 4, 3.5, 2.99, "x10.2 candy alchemists and candy time machines’ effects"], // 13
+  ["Successful Experimental Candy", 4, 3.5, 2.99, "x10.2 candy alchemists and candy time machine's effects"], // 13
   ["Candy Essence from Nature", 5, 9.78, 8, "x2 egg rewards"], // 14
-  ["LORD of CANDIES", 6, 20, 20, "x7 all the other equipped pets’ CPEs and APEs"] // 15
+  ["LORD of CANDIES", 6, 20, 20, "x7 all the other equipped pets' CPEs and APEs"] // 15
 ]
-var achCategories = ["Total Clicks", "Click Power", "Auto Production", "Collections", "Candies", "Secret"];
+var achCategories = ["Total Clicks", "Auto Production", "Click Power", "Collections", "Candies", "Secret"];
 var totalClicksAchs = [
   ["Off to a Good Start", 10n, "candy x2"], // 0
   ["π", 314n, "candy x1000"], // 1
@@ -61,6 +61,15 @@ var totalClicksAchs = [
   ["Top Clicker", 36000n, "super egg x3"], // 5
   ["Clicker God", 80000n, "+1 rebirth level"] // 6
 ];
+var eAPAchs = [
+  ["1 Candy, 2 Candies, 3 Candies, ...", 1n, "candy x5"], // 0
+  ["Getting Productive", 50n, "+10 cpc OCP"], // 1
+  ["Efficient Candy Flow", 2000n, "lottery ticket x1"], // 2
+  ["Fountain of Candies", 60000, "decent egg x1"], // 3
+  ["Speed Mastery", 10000000n, "+154,000 cpc OCP"], // 4
+  ["Raining Candies", 800000000n, "super egg x1"], // 5
+  ["AP Greatness", 100000000000000n, "+3 prestige levels"] // 6
+]
 var eCPAchs = [
   ["Baby Cursor", 11n, "+2 cps OAP"], // 0
   ["Elementary Cursor", 450n, "+50 cps OAP"], // 1
@@ -70,14 +79,14 @@ var eCPAchs = [
   ["Universal Cursor", 56000000n, "chocolate super egg x1"], // 5
   ["Immortal Cursor", 800000000n, "+1 rebirth level"] // 6
 ]
-var eAPAchs = [
-  ["1 Candy, 2 Candies, 3 Candies, ...", 1n, "candy x5"], // 0
-  ["Getting Productive", 50n, "+10 cpc OCP"], // 1
-  ["Efficient Candy Flow", 2000n, "lottery ticket x1"], // 2
-  ["Fountain of Candies", 60000, "decent egg x1"], // 3
-  ["Speed Mastery", 10000000n, "+154000 cpc OCP"], // 4
-  ["Raining Candies", 800000000n, "super egg x1"], // 5
-  ["AP Greatness", 100000000000000n, "+3 prestige levels"] // 6
+var candiesAchs = [
+  ["Hello, New Player", 5n, "candy x1"], // 0
+  ["Lucky Number", 777n, "candy x100"], // 1
+  ["Live on Candies", 10000n, "+40 cpc OCP"], // 2
+  ["Candy Millionaire", BigInt(10 ** 6), "+1000 cps OAP"], // 3
+  ["Solve World Hunger", BigInt(8 * 10 ** 9), "super egg x1"], // 4
+  ["Build Candyland", BigInt(2 * 10 ** 12), "+2.0 billion cps OAP"], // 5
+  ["Become LORD of CANDIES", BigInt(4 * 10 ** 15), "LORD of CANDIES x1"] // 6
 ]
 
 for (var i = 0; i < itemList0.length; i++) {
@@ -90,11 +99,14 @@ for (var i = 0; i < petList.length; i++) {
 for (var i = 0; i < totalClicksAchs.length; i++) {
   totalClicksAchs[i].push(0);
 }
+for (var i = 0; i < eAPAchs.length; i++) {
+  eAPAchs[i].push(0);
+}
 for (var i = 0; i < eCPAchs.length; i++) {
   eCPAchs[i].push(0);
 }
-for (var i = 0; i < eAPAchs.length; i++) {
-  eAPAchs[i].push(0);
+for (var i = 0; i < candiesAchs.length; i++) {
+  candiesAchs[i].push(0);
 }
 
 // PWA
@@ -188,14 +200,19 @@ function update() {
   hAPE = BigInt(Math.round(APE * 100));
   ECP = OCP * hCPE / 100n;
   EAP = OAP * hAPE / 100n;
+  for (var i = 0; i < eAPAchs.length; i++) {
+    if (EAP >= eAPAchs[i][1] && eAPAchs[i][3] == 0) {
+      APAch(i);
+    }
+  }
   for (var i = 0; i < eCPAchs.length; i++) {
     if (ECP >= eCPAchs[i][1] && eCPAchs[i][3] == 0) {
       CPAch(i);
     }
   }
-  for (var i = 0; i < eAPAchs.length; i++) {
-    if (EAP >= eAPAchs[i][1] && eAPAchs[i][3] == 0) {
-      APAch(i);
+  for (var i = 0; i < candiesAchs.length; i++) {
+    if (candies >= candiesAchs[i][1] && candiesAchs[i][3] == 0) {
+      candiesAch(i);
     }
   }
   document.getElementById("candies").innerHTML = word(candies);
@@ -447,7 +464,7 @@ function buySuperEgg(free = false) {
 }
 
 function totalClicksAch(ach) {
-  alert("Achievement unlocked: " + totalClicksAchs[ach][0] + "\nYou've reached " + totalClicksAchs[ach][1] + " total clicks.\nReward: " + totalClicksAchs[ach][2]);
+  alert("Achievement unlocked: " + totalClicksAchs[ach][0] + "\nYou've reached " + word(totalClicksAchs[ach][1]) + " total clicks.\nReward: " + totalClicksAchs[ach][2]);
   totalClicksAchs[ach][3] = 1;
   if (ach == 0) {
     candies += 2n;
@@ -468,8 +485,28 @@ function totalClicksAch(ach) {
   }
 }
 
+function APAch(ach) {
+  alert("Achievement unlocked: " + eAPAchs[ach][0] + "\nYou've reached " + word(eAPAchs[ach][1]) + " cps OAP.\nReward: " + eAPAchs[ach][2]);
+  eAPAchs[ach][3] = 1;
+  if (ach == 0) {
+    candies += 5n;
+  } else if (ach == 1) {
+    OCP += 10n;
+  } else if (ach == 2) {
+    // Lottery ticket x1
+  } else if (ach == 3) {
+    buyDecentEgg(true);
+  } else if (ach == 4) {
+    OCP += 154000n;
+  } else if (ach == 5) {
+    buySuperEgg(true);
+  } else if (ach == 6) {
+    prestigeLevel += 3;
+  }
+}
+
 function CPAch(ach) {
-  alert("Achievement unlocked: " + eCPAchs[ach][0] + "\nYou've reached " + eCPAchs[ach][1] + " cpc OCP.\nReward: " + eCPAchs[ach][2]);
+  alert("Achievement unlocked: " + eCPAchs[ach][0] + "\nYou've reached " + word(eCPAchs[ach][1]) + " cpc OCP.\nReward: " + eCPAchs[ach][2]);
   eCPAchs[ach][3] = 1;
   if (ach == 0) {
     OAP += 2n;
@@ -488,23 +525,23 @@ function CPAch(ach) {
   }
 }
 
-function APAch(ach) {
-  alert("Achievement unlocked: " + eAPAchs[ach][0] + "\nYou've reached " + eAPAchs[ach][1] + " cpc OCP.\nReward: " + eAPAchs[ach][2]);
-  eAPAchs[ach][3] = 1;
+function candiesAch(ach) {
+  alert("Achievement unlocked: " + candiesAchs[ach][0] + "\nYou own " + word(candiesAchs[ach][1]) + " candies.\nReward: " + candiesAchs[ach][2]);
+  candiesAchs[ach][3] = 1;
   if (ach == 0) {
-    OAP += 2n;
+    candies += 1n;
   } else if (ach == 1) {
-    OAP += 50n;
+    candies += 100n;
   } else if (ach == 2) {
-    buyDecentEgg(true);
+    OCP += 40n;
   } else if (ach == 3) {
-    OAP += 6000n;
+    OAP += 1000n;
   } else if (ach == 4) {
-    OCP += 100000n;
+    buySuperEgg(true);
   } else if (ach == 5) {
-    // Chocolate super egg x1
+    OAP += 2000000000n;
   } else if (ach == 6) {
-    rebirthLevel++;
+    pet(15);
   }
 }
 
@@ -585,9 +622,11 @@ function openSpecificAchPage(page) {
   if (page == 0) {
     createAchRow(totalClicksAchs, i => "Reaching " + word(totalClicksAchs[i][1]) + " total clicks");
   } else if (page == 1) {
-    createAchRow(eCPAchs, i => "Reaching " + word(eCPAchs[i][1]) + " cpc ECP");
-  } else if (page == 2) {
     createAchRow(eAPAchs, i => "Reaching " + word(eAPAchs[i][1]) + " cps EAP");
+  } else if (page == 2) {
+    createAchRow(eCPAchs, i => "Reaching " + word(eCPAchs[i][1]) + " cpc ECP");
+  } else if (page == 4) {
+    createAchRow(candiesAchs, i => "Owning " + word(candiesAchs[i][1]) + " candies");
   }
   scrollSmoothly();
 }
