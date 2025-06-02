@@ -103,9 +103,15 @@
         tr th:last-child, tr td:last-child {
             border-right-width: 4px;
         }
-        .normalUpgradeBtns {
+        .normalUpgradeBtns, .specialUpgradeBtns {
             background-color: rgba(255, 0, 0, 0.25);
             color: black;
+        }
+        .lockedSpecialUpgradeBtns {
+            display: none;
+        }
+        #specialBr {
+            display: none;
         }
         .itemBtns {
             background-color: rgba(255, 0, 0, 0.5);
@@ -257,6 +263,11 @@
             <p>OCP: <span id="OCP">1</span> cpc, ECP: <span id="ECP">1</span> cpc</p>
             <button class="normalUpgradeBtns clickerBtns" id="upgradeBtn" onclick="buyUpgrade()" title="Increases OCP by 5 cpc">Upgrade</button>
             <button class="normalUpgradeBtns clickerBtns" id="randomUpgradeBtn" onclick="buyRandomUpgrade()" title="Increases OCP by 1~5 cpc">Random upgrade</button>
+            <br id="specialBr">
+            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="grandUpgradeBtn" onclick="buyGrandUpgrade()" title="Increases OCP by 160 cpc">Grand upgrade</button>
+            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="superUpgradeBtn" onclick="buySuperUpgrade()" title="Increases OCP by 5500 cpc">Super upgrade</button>
+            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="megaUpgradeBtn" onclick="buyMegaUpgrade()" title="Increases OCP by 177,000 cpc">Mega upgrade</button>
+            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="ultimateUpgradeBtn" onclick="buyUltimateUpgrade()" title="Increases OCP by 5.76 million cpc">Ultimate upgrade</button>
             <br>
             <button class="itemBtns clickerBtns" id="itemBtn0" title="Produces 1 candy per second">Candy producer</button>
             <button class="itemBtns clickerBtns" id="itemBtn1" title="Produces 10 candies per second">Candy tree</button>
