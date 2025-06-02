@@ -41,43 +41,43 @@ var petList = [ // [0 name, 1 rarity, 2 CPE, 3 APE, 4 SP, 5 num, 6 num of equipp
   ["Triangular Candy", 0, 3, 0.3, 0], // 4
   ["C & Y", 1, 2, 1, 0], // 5
   ["Heart Candy", 1, 1.74, 1.32, 0], // 6
-  ["Stoni Candy", 1, 1.6, 1.2, "x0.5 candy tree's effect"], // 7
-  ["Pixelized Candy", 2, 2.8, 1.86, "x1.4 events' effects"], // 8
-  ["Pot o' Candy", 2, 2.2, 2.17, "x2 candy parties' duration"], // 9
-  ["Gemdy", 3, 3.2, 2.72, "x1.25 candy treasure's effect"], // 10
+  ["Stoni Candy", 1, 1.6, 1.2, "x0.5 effect of candy tree"], // 7
+  ["Pixelized Candy", 2, 2.8, 1.86, "x1.4 effect of events"], // 8
+  ["Pot o' Candy", 2, 2.2, 2.17, "x2 duration of candy parties"], // 9
+  ["Gemdy", 3, 3.2, 2.72, "x1.25 effect of candy treasure"], // 10
   ["False Dilemma Candy", 3, 0.01, 0.01, 0], // 11
   ["Failed Experimental Candy", 3, 1.2, 1, "Players can trade 3 of these for 1 rebirth level"], // 12
-  ["Successful Experimental Candy", 4, 3.5, 2.99, "x10.2 candy alchemists and candy time machine's effects"], // 13
+  ["Successful Experimental Candy", 4, 3.5, 2.99, "x10.2 effects of candy alchemist and candy time machine"], // 13
   ["Candy Essence from Nature", 5, 9.78, 8, "x2 egg rewards"], // 14
-  ["LORD of CANDIES", 6, 20, 20, "x7 all the other equipped pets' CPEs and APEs"] // 15
+  ["LORD of CANDIES", 6, 20, 20, "x7 APEs and CPEs of all the other equipped pets"] // 15
 ]
 var achCategories = ["Total Clicks", "Auto Production", "Click Power", "Collections", "Candies", "Secret"];
 var totalClicksAchs = [
   ["Off to a Good Start", 10n, "candy x2"], // 0
-  ["π", 314n, "candy x1000"], // 1
+  ["π", 314n, "candy x1,000"], // 1
   ["Moving On", 1200n, "+60 cpc OCP"], // 2
-  ["On Great Pace", 6000n, "+4000 cps OAP"], // 3
+  ["On Great Pace", 6000n, "+4,000 cps OAP"], // 3
   ["Golden Ratio", 16180n, "super egg x1"], // 4
   ["Top Clicker", 36000n, "super egg x3"], // 5
   ["Clicker God", 80000n, "+1 rebirth level"] // 6
 ];
-var eAPAchs = [
+var oAPAchs = [
   ["1 Candy, 2 Candies, 3 Candies, ...", 1n, "candy x5"], // 0
   ["Getting Productive", 50n, "+10 cpc OCP"], // 1
   ["Efficient Candy Flow", 2000n, "lottery ticket x1"], // 2
   ["Fountain of Candies", 60000, "decent egg x1"], // 3
-  ["Speed Mastery", 10000000n, "+154,000 cpc OCP"], // 4
+  ["Speed Mastery", 10000000n, "+154 cpc OCP"], // 4
   ["Raining Candies", 800000000n, "super egg x1"], // 5
   ["AP Greatness", 100000000000000n, "+3 prestige levels"] // 6
 ]
-var eCPAchs = [
+var oCPAchs = [
   ["Baby Cursor", 11n, "+2 cps OAP"], // 0
-  ["Elementary Cursor", 450n, "+50 cps OAP"], // 1
-  ["Medium Cursor", 6800n, "decent egg x1"], // 2
-  ["Euler's Cursor", 271828n, "+6000 cps OAP"], // 3
-  ["Gigantic Cursor", 3800000n, "+100000 cpc OCP"], // 4
-  ["Universal Cursor", 56000000n, "chocolate super egg x1"], // 5
-  ["Immortal Cursor", 800000000n, "+1 rebirth level"] // 6
+  ["Elementary Cursor", 225n, "+100 cps OAP"], // 1
+  ["Medium Cursor", 480n, "decent egg x1"], // 2
+  ["Euler's Cursor", 740n, "+2,718,282 (2.7 million) cps OAP"], // 3
+  ["Gigantic Cursor", 1234n, "+321 cpc OCP"], // 4
+  ["Universal Cursor", 1800n, "chocolate super egg x1"], // 5
+  ["Immortal Cursor", 2700n, "+1 rebirth level"] // 6
 ]
 var candiesAchs = [
   ["Hello, New Player", 5n, "candy x1"], // 0
@@ -99,11 +99,11 @@ for (var i = 0; i < petList.length; i++) {
 for (var i = 0; i < totalClicksAchs.length; i++) {
   totalClicksAchs[i].push(0);
 }
-for (var i = 0; i < eAPAchs.length; i++) {
-  eAPAchs[i].push(0);
+for (var i = 0; i < oAPAchs.length; i++) {
+  oAPAchs[i].push(0);
 }
-for (var i = 0; i < eCPAchs.length; i++) {
-  eCPAchs[i].push(0);
+for (var i = 0; i < oCPAchs.length; i++) {
+  oCPAchs[i].push(0);
 }
 for (var i = 0; i < candiesAchs.length; i++) {
   candiesAchs[i].push(0);
@@ -200,13 +200,13 @@ function update() {
   hAPE = BigInt(Math.round(APE * 100));
   ECP = OCP * hCPE / 100n;
   EAP = OAP * hAPE / 100n;
-  for (var i = 0; i < eAPAchs.length; i++) {
-    if (EAP >= eAPAchs[i][1] && eAPAchs[i][3] == 0) {
+  for (var i = 0; i < oAPAchs.length; i++) {
+    if (EAP >= oAPAchs[i][1] && oAPAchs[i][3] == 0) {
       APAch(i);
     }
   }
-  for (var i = 0; i < eCPAchs.length; i++) {
-    if (ECP >= eCPAchs[i][1] && eCPAchs[i][3] == 0) {
+  for (var i = 0; i < oCPAchs.length; i++) {
+    if (ECP >= oCPAchs[i][1] && oCPAchs[i][3] == 0) {
       CPAch(i);
     }
   }
@@ -486,8 +486,8 @@ function totalClicksAch(ach) {
 }
 
 function APAch(ach) {
-  alert("Achievement unlocked: " + eAPAchs[ach][0] + "\nYou've reached " + word(eAPAchs[ach][1]) + " cps OAP.\nReward: " + eAPAchs[ach][2]);
-  eAPAchs[ach][3] = 1;
+  alert("Achievement unlocked: " + oAPAchs[ach][0] + "\nYou've reached " + word(oAPAchs[ach][1]) + " cps OAP.\nReward: " + oAPAchs[ach][2]);
+  oAPAchs[ach][3] = 1;
   if (ach == 0) {
     candies += 5n;
   } else if (ach == 1) {
@@ -497,7 +497,7 @@ function APAch(ach) {
   } else if (ach == 3) {
     buyDecentEgg(true);
   } else if (ach == 4) {
-    OCP += 154000n;
+    OCP += 154n;
   } else if (ach == 5) {
     buySuperEgg(true);
   } else if (ach == 6) {
@@ -506,18 +506,18 @@ function APAch(ach) {
 }
 
 function CPAch(ach) {
-  alert("Achievement unlocked: " + eCPAchs[ach][0] + "\nYou've reached " + word(eCPAchs[ach][1]) + " cpc OCP.\nReward: " + eCPAchs[ach][2]);
-  eCPAchs[ach][3] = 1;
+  alert("Achievement unlocked: " + oCPAchs[ach][0] + "\nYou've reached " + word(oCPAchs[ach][1]) + " cpc OCP.\nReward: " + oCPAchs[ach][2]);
+  oCPAchs[ach][3] = 1;
   if (ach == 0) {
     OAP += 2n;
   } else if (ach == 1) {
-    OAP += 50n;
+    OAP += 100n;
   } else if (ach == 2) {
     buyDecentEgg(true);
   } else if (ach == 3) {
-    OAP += 6000n;
+    OAP += 2718282n;
   } else if (ach == 4) {
-    OCP += 100000n;
+    OCP += 321n;
   } else if (ach == 5) {
     // Chocolate super egg x1
   } else if (ach == 6) {
@@ -557,7 +557,6 @@ function createAchRow(arr, func) {
     } else {
       newAch.children[0].innerHTML = arr[i][0];
       newAch.children[2].innerHTML = title(arr[i][2]);
-
     }
     newAch.children[1].innerHTML = func(i);
     newAch.classList.add("achRow");
@@ -622,9 +621,9 @@ function openSpecificAchPage(page) {
   if (page == 0) {
     createAchRow(totalClicksAchs, i => "Reaching " + word(totalClicksAchs[i][1]) + " total clicks");
   } else if (page == 1) {
-    createAchRow(eAPAchs, i => "Reaching " + word(eAPAchs[i][1]) + " cps EAP");
+    createAchRow(oAPAchs, i => "Reaching " + word(oAPAchs[i][1]) + " cps EAP");
   } else if (page == 2) {
-    createAchRow(eCPAchs, i => "Reaching " + word(eCPAchs[i][1]) + " cpc ECP");
+    createAchRow(oCPAchs, i => "Reaching " + word(oCPAchs[i][1]) + " cpc ECP");
   } else if (page == 4) {
     createAchRow(candiesAchs, i => "Owning " + word(candiesAchs[i][1]) + " candies");
   }
