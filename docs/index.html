@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="Word.js"></script>
     <script src="Scripts.js"></script>
     <link rel="icon" href="0. Candy Area/Icons/P0000.png">
@@ -9,8 +11,8 @@
     <!-- <link rel="manifest" href="Manifest.json"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Candy Clicker</title>
-    </head>
-    <body style="
+</head>
+<body style="
     padding-left: 20px;
     padding-top: 50px;
     overflow-x: hidden;
@@ -160,11 +162,11 @@
         }
         .areas {
             display: inline-block;
-            padding-left: 10px;
-            padding-right: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
             height: 100%;
             line-height: 50px;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
         }
         .area_selected {
@@ -240,6 +242,10 @@
     ">
         <div id="candyArea" class="areas area_selected">Candy</div>
         <div id="chocolateArea" class="areas">Chocolate</div>
+        <div id="bubbleGumArea" class="areas">Bubble gum</div>
+        <div id="cookieArea" class="areas">Cookie</div>
+        <div id="gummyBearArea" class="areas">Gummy bear</div>
+        <div id="puddingArea" class="areas">Pudding</div>
     </div>
     <div id="main">
         <div id="clicker" style="
@@ -264,10 +270,10 @@
             <button class="normalUpgradeBtns clickerBtns" id="upgradeBtn" onclick="buyUpgrade()" title="Increases OCP by 5 cpc">Upgrade</button>
             <button class="normalUpgradeBtns clickerBtns" id="randomUpgradeBtn" onclick="buyRandomUpgrade()" title="Increases OCP by 1~5 cpc">Random upgrade</button>
             <br id="specialBr">
-            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="grandUpgradeBtn" onclick="buyGrandUpgrade()" title="Increases OCP by 160 cpc">Grand upgrade</button>
-            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="superUpgradeBtn" onclick="buySuperUpgrade()" title="Increases OCP by 5500 cpc">Super upgrade</button>
-            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="megaUpgradeBtn" onclick="buyMegaUpgrade()" title="Increases OCP by 177,000 cpc">Mega upgrade</button>
-            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="ultimateUpgradeBtn" onclick="buyUltimateUpgrade()" title="Increases OCP by 5.76 million cpc">Ultimate upgrade</button>
+            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="grandUpgradeBtn" data-id="0" title="Increases OCP by 160 cpc">Grand upgrade</button>
+            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="superUpgradeBtn" data-id="1" title="Increases OCP by 5500 cpc">Super upgrade</button>
+            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="megaUpgradeBtn" data-id="2" title="Increases OCP by 177,000 cpc">Mega upgrade</button>
+            <button class="specialUpgradeBtns lockedSpecialUpgradeBtns clickerBtns" id="ultimateUpgradeBtn" data-id="3" title="Increases OCP by 5.76 million cpc">Ultimate upgrade</button>
             <br>
             <button class="itemBtns clickerBtns" id="itemBtn0" title="Produces 1 candy per second">Candy producer</button>
             <button class="itemBtns clickerBtns" id="itemBtn1" title="Produces 10 candies per second">Candy tree</button>
@@ -487,4 +493,5 @@
             </table>
         </div>
     </div>
-</body></html>
+</body>
+</html>
