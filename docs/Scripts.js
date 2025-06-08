@@ -9,7 +9,7 @@ var OAP = 0n;
 var EAP = 0n;
 var APE = 1;
 var hAPE = 100n;
-var itemList0 = [ // [0 name, 1 num, 2 cost, 3 ap]
+var itemList0 = [ // [0 name, 1 num, 2 cost, 3 oap]
   ["Candy producer"], // 0
   ["Candy tree"], // 1
   ["Candy factory"], // 2
@@ -25,6 +25,12 @@ var itemList;
 var recentItems = [];
 var upgradeCost = 50n;
 var randomUpgradeCost = 30n;
+var specialUpgrades = [ // [0 name, 1 cost, 2 ocp]
+  ["grand", 6000n, 160n], // 0
+  ["super", 920000n, 5500n], // 1
+  ["mega", 520000000n, 177000n], //2
+  ["ultimate", 540000000000n, 5760000n] // 3
+];
 var decentEggCost = 1000000n;
 var superEggCost = 1000000000n;
 var prestigeCost = 1000000n;
@@ -201,12 +207,12 @@ function update() {
   ECP = OCP * hCPE / 100n;
   EAP = OAP * hAPE / 100n;
   for (var i = 0; i < oAPAchs.length; i++) {
-    if (EAP >= oAPAchs[i][1] && oAPAchs[i][3] == 0) {
+    if (OAP >= oAPAchs[i][1] && oAPAchs[i][3] == 0) {
       APAch(i);
     }
   }
   for (var i = 0; i < oCPAchs.length; i++) {
-    if (ECP >= oCPAchs[i][1] && oCPAchs[i][3] == 0) {
+    if (OCP >= oCPAchs[i][1] && oCPAchs[i][3] == 0) {
       CPAch(i);
     }
   }
@@ -254,6 +260,17 @@ function update() {
       document.getElementById("recentItem" + i).removeAttribute("data-id");
     }
   }
+  if (prestigeLevel == 1) {
+    document.getElementById("grandUpgradeBtn").classList.remove("lockedSpecialUpgradeBtns");
+  } else if (prestigeLevel == 2) {
+    document.getElementById("superUpgradeBtn").classList.remove("lockedSpecialUpgradeBtns");
+  } else if (prestigeLevel == 3) {
+    document.getElementById("megaUpgradeBtn").classList.remove("lockedSpecialUpgradeBtns");
+    document.getElementById("specialBr").style.display = "inline";
+  } else if (prestigeLevel == 4) {
+    document.getElementById("ultimateUpgradeBtn").classList.remove("lockedSpecialUpgradeBtns");
+    document.getElementById("specialBr").style.display = "inline";
+  }
 }
  document.oncontextmenu = function() {
   window.event.returnValue = false; 
@@ -274,6 +291,13 @@ function mainBtns() {
     document.getElementById("randomUpgradeBtn").classList.remove("locked");
   } else {
     document.getElementById("randomUpgradeBtn").classList.add("locked");
+  }
+  for (var i = 0; i < specialUpgrades.length; i++) {
+    if (candies >= specialUpgrades[i][1]) {
+      document.getElementsByClassName("specialUpgradeBtns")[i].classList.remove("locked");
+    } else {
+      document.getElementsByClassName("specialUpgradeBtns")[i].classList.add("locked");
+    }
   }
   for (var i = 0; i < itemList.length; i++) {
     if (candies >= itemList[i][2]) {
@@ -330,6 +354,14 @@ function buyRandomUpgrade() {
     candies -= randomUpgradeCost;
     OCP += BigInt(Math.floor(Math.random() * 5) + 1);
     randomUpgradeCost = increase(randomUpgradeCost);
+    update();
+  }
+}
+
+function buySpecialUpgrade(upgrade) {
+  if (candies >= specialUpgrades[upgrade][1]) {
+    candies -= specialUpgrades[upgrade][1];
+    OCP += specialUpgrades[upgrade][2];
     update();
   }
 }
@@ -718,7 +750,14 @@ setTimeout(function() {
     });
   }
 
-  // An recent item is clicked
+  // A special upgrade button is clicked
+  for (var i = 0; i < document.getElementsByClassName("specialUpgradeBtns").length; i++) {
+    document.getElementsByClassName("specialUpgradeBtns")[i].addEventListener("click", function() {
+      buySpecialUpgrade(this.dataset.id);
+    })
+  }
+
+  // A recent item is clicked
   for (var i = 0; i < document.getElementsByClassName("recentItems").length; i++) {
     document.getElementsByClassName("recentItems")[i].addEventListener("click", function() {
       alert("Imformation about '" + itemList[this.dataset.id][0] + "'\nAP: " + word(itemList[this.dataset.id][3]) + " cps");
