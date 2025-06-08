@@ -4,7 +4,7 @@
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ffe0e6",
+  "theme_color": "#ffd9df",
   "icons": [
     {
       "src": "0. Candy Area/Icons/P0000_192.png",
